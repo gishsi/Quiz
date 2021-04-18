@@ -6,8 +6,7 @@ import java.util.Scanner;
 
 public class Application {
     private Scanner scan;
-    // Store banks
-    private List<Bank> banks;
+    private List<Module> modules;
 
 
     /**
@@ -15,7 +14,7 @@ public class Application {
      */
     public Application() {
         scan = new Scanner(System.in);
-        banks = new ArrayList<>();
+        modules = new ArrayList<>();
     }
 
     /////////////////////////////////////// MAIN ///////////////////////////////////////////
@@ -24,17 +23,15 @@ public class Application {
         app.runTest();
         app.runMenu();
     }
-
     /////////////////////////////////////// MENU ///////////////////////////////////////////
+
     /**
      * Print the menu
      */
     public void printMenu() {
         System.out.println("1. Create a new question bank.");
-        // make this so that we can add more than 1 question at a time, this will also support 2 languages
         System.out.println("2. Add a new question to an existing bank.");
         System.out.println("3. Delete a bank (must be empty).");
-        // there must be modules
         System.out.println("4. List all the question banks for a specific module.");
         System.out.println("5. Remove a question from a bank.");
         System.out.println("q - Quit");
@@ -45,37 +42,45 @@ public class Application {
      */
     public void runMenu() {
         String option = "";
+        Module module = null;
+        boolean isModuleCorrect = false;
         System.out.println("Welcome to the Quiz application (Teacher)");
+        printModules();
+        System.out.println("Which module would you like to work on?");
+
+
+        while(!isModuleCorrect) {
+            String moduleID = scan.nextLine().toUpperCase();
+            if(!moduleID.equals("")) {
+                if(pickModule(moduleID)!=null) {
+                    module = pickModule(moduleID);
+                    isModuleCorrect = true;
+                } else {
+                    printModules();
+                    System.out.println("Choose module again: ");
+                }
+            }
+        }
+
         System.out.println("These are your options: ");
         do {
             printMenu();
             option = scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
-                    addBank();
+                    module.addBank();
                     break;
                 case "2":
-                    addQuestion();
+                    module.addQuestion();
                     break;
                 case "3":
-                    deleteBank();
+                    module.deleteBank();
                     break;
                 case "4":
-                    // every bank must be specific for a module -> either a module class or string
-                    // list the banks
-                    System.out.println(listBanks());
-                    System.out.println("Pick a bank");
-                    Bank which = searchForBank(scan.nextLine());
-                    listQuestions(which);
+                    module.listBanks();
                     break;
                 case "5":
-                    // list the banks
-                    System.out.println(listBanks());
-                    System.out.println("Pick a bank");
-                    which = searchForBank(scan.nextLine());
-                    listQuestions(which);
-                    // remove the question
-                    removeQuestion(which);
+                    removeQuestion(module);
                     break;
                 case "Q":
                     break;
@@ -87,29 +92,12 @@ public class Application {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
-    private void bankExample() {
-        // a couple of banks for testing
-        Bank bank1 = new Bank();
-        bank1.setID("Bank1");
-        Bank bank2 = new Bank();
-        bank2.setID("Bank2");
-        Bank bank3 = new Bank();
-        bank3.setID("Bank3");
-        banks.add(bank1);
-        banks.add(bank2);
-        banks.add(bank3);
-        // making the questions this way is only used here to provide data to work with
-        Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
-        Question newQuestion1 = new SingleChoice("SingleChoice", "Where do you live?", "The fuck bro");
-
-        Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
-        Question newQuestionPL1 = new SingleChoice("SingleChoice", "pytanko dwa", "odpowiedz dwa");
-
-        bank1.addNewQuestion(newQuestion, "ENG");
-        bank1.addNewQuestion(newQuestion1, "ENG");
-        bank1.addNewQuestion(newQuestionPL, "PL");
-        bank1.addNewQuestion(newQuestionPL1, "PL");
-
+    private void load() {
+        Module cs123 = new Module("CS123");
+        Module cs107 = new Module("CS107");
+        cs123.load();
+        modules.add(cs107);
+        modules.add(cs123);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,109 +106,52 @@ public class Application {
      * Method that runs tests in our application so that main could be as short as possible
      */
     public void runTest() {
-        bankExample();
+        load();
     }
 
     /**
-     * Removes a question
-     */
-    public void removeQuestion(Bank which) {
-        if (which != null) {
-            which.removeQuestion();
-        } else {
-            System.err.println("This bank does not exist.");
-        }
-    }
-    /**
-     * Add a new question
-     */
-    public void addQuestion() {
-        listBanks();
-        System.out.println("Pick a bank");
-        Bank which = searchForBank(scan.nextLine());
-
-        if (which != null) {
-            Question newQuestion = new SingleChoice();
-            System.out.println("Enter the question in english:");
-            newQuestion.readKeyboard();
-            which.addNewQuestion(newQuestion, "ENG");
-
-            newQuestion = new SingleChoice();
-
-            System.out.println("Enter the question in polish:");
-            newQuestion.readKeyboard();
-            which.addNewQuestion(newQuestion, "PL");
-        } else {
-            System.err.println("This bank does not exist.");
-        }
-    }
-
-    /**
-     * Adds a new bank to the banks array list
-     */
-    public void addBank() {
-        Bank newBank = new Bank();
-        newBank.readKeyboard();
-        banks.add(newBank);
-    }
-
-    /**
-     * List all the banks
+     * Remove a question
      *
-     * @return return a string that has all the banks in it
+     * @param module - the module we are working on
      */
-    public String listBanks() {
-        StringBuilder sb = new StringBuilder();
-        for (Bank bank : banks) {
-            sb.append(bank.getID()).append("\n");
-        }
-        return sb.toString();
+    public void removeQuestion(Module module) {
+        // list the banks
+        module.listBanks();
+        System.out.println("Pick a bank");
+        Bank which = module.searchForBank(scan.nextLine());
+        //list the questions for that bank
+        module.listQuestions(which);
+        // remove the question
+        module.removeQuestion(which);
     }
 
-    /**
-     * Listing all the questions for a specific bank
-     */
-    public void listQuestions(Bank which) {
-        if (which != null && which.getQuestionsEng().size() != 0) {
-            System.out.println(which.listQuestions());
-        } else if (which != null && which.getQuestionsEng().size() == 0) {
-            System.err.println("This bank has no questions.");
-        } else {
-            System.err.println("This bank does not exist.");
-        }
-    }
-
-    /**
-     * Method for deleting a bank
-     */
-    public void deleteBank() {
-        listBanks();
-        System.out.println("Enter the ID of the bank that you want to delete:");
-        Bank which = searchForBank(scan.nextLine());
-        if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPl().size() == 0) {
-            banks.remove(which);
-            System.out.println("Removed: " + which.getID());
-        } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPl().size() != 0) {
-            System.err.println("This bank is not empty.");
-        } else {
-            System.err.println("This bank does not exist.");
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
     /*
-        Helper function to search for a bank, used for listing a questions in a bank and in deleting a bank
+     * Helper function for printing modules
      */
-    private Bank searchForBank(String who) {
-        Bank bankToDelete = new Bank(who);
-        Bank which = null;
-        // getting the right bank into the which variable
-        for (Bank b : banks) {
-            if (bankToDelete.equals(b)) {
-                which = b;
+    private void printModules() {
+        StringBuilder sb = new StringBuilder();
+        for (Module m : modules) {
+            sb.append(m.getId()).append("\n");
+        }
+        System.out.println(sb.toString());
+    }
+
+    /**
+     * Helper method for getting the banks
+     *
+     * @return the module we want to work on
+     */
+    private Module pickModule(String moduleID) {
+        Module which = null;
+        Module other = new Module(moduleID);
+
+        if (!moduleID.equals("")) {
+            for (Module m : modules) {
+                if (m.equals(other)) {
+                    which = m;
+                }
             }
         }
         return which;
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////
 }

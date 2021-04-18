@@ -1,0 +1,173 @@
+package without_module;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Module {
+    private String id;
+    private List<Bank> banks;
+    private Scanner scan;
+
+    public Module(String id) {
+        this.id =id;
+        banks = new ArrayList<>();
+        scan = new Scanner(System.in);
+    }
+
+    public void load() {
+        // a couple of banks for testing
+        Bank bank1 = new Bank();
+        bank1.setID("Bank1");
+        Bank bank2 = new Bank();
+        bank2.setID("Bank2");
+        Bank bank3 = new Bank();
+        bank3.setID("Bank3");
+        banks.add(bank1);
+        banks.add(bank2);
+        banks.add(bank3);
+        // making the questions this way is only used here to provide data to work with
+        Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
+        Question newQuestion1 = new SingleChoice("SingleChoice", "Where do you live?", "The fuck bro");
+
+        Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
+        Question newQuestionPL1 = new SingleChoice("SingleChoice", "pytanko dwa", "odpowiedz dwa");
+
+        bank1.addNewQuestion(newQuestion, "ENG");
+        bank1.addNewQuestion(newQuestion1, "ENG");
+        bank1.addNewQuestion(newQuestionPL, "PL");
+        bank1.addNewQuestion(newQuestionPL1, "PL");
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Removes a question
+     */
+    public void removeQuestion(Bank which) {
+        if (which != null) {
+            which.removeQuestion();
+        } else {
+            System.err.println("This bank does not exist.");
+        }
+    }
+    /**
+     * Add a new question
+     */
+    public void addQuestion() {
+        listBanks();
+        System.out.println("Pick a bank");
+        Bank which = searchForBank(scan.nextLine());
+
+        if (which != null) {
+            Question newQuestion = new SingleChoice();
+            System.out.println("Enter the question in english:");
+            newQuestion.readKeyboard();
+            which.addNewQuestion(newQuestion, "ENG");
+
+            newQuestion = new SingleChoice();
+
+            System.out.println("Enter the question in polish:");
+            newQuestion.readKeyboard();
+            which.addNewQuestion(newQuestion, "PL");
+        } else {
+            System.err.println("This bank does not exist.");
+        }
+    }
+
+    /**
+     * Adds a new bank to the banks array list
+     */
+    public void addBank() {
+        Bank newBank = new Bank();
+        newBank.readKeyboard();
+        banks.add(newBank);
+    }
+
+    /**
+     * List all the banks
+     */
+    public void listBanks() {
+        StringBuilder sb = new StringBuilder();
+        for (Bank bank : banks) {
+            sb.append(bank.getID()).append("\n");
+        }
+        System.out.println(sb.toString());
+    }
+
+    /**
+     * Listing all the questions for a specific bank
+     */
+    public void listQuestions(Bank which) {
+        if (which != null && which.getQuestionsEng().size() != 0) {
+            System.out.println(which.listQuestions());
+        } else if (which != null && which.getQuestionsEng().size() == 0) {
+            System.err.println("This bank has no questions.");
+        } else {
+            System.err.println("This bank does not exist.");
+        }
+    }
+
+    /**
+     * Method for deleting a bank
+     */
+    public void deleteBank() {
+        listBanks();
+        System.out.println("Enter the ID of the bank that you want to delete:");
+        Bank which = searchForBank(scan.nextLine());
+        if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPl().size() == 0) {
+            banks.remove(which);
+            System.out.println("Removed: " + which.getID());
+        } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPl().size() != 0) {
+            System.err.println("This bank is not empty.");
+        } else {
+            System.err.println("This bank does not exist.");
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+        Helper function to search for a bank, used for listing a questions in a bank and in deleting a bank
+     */
+    public Bank searchForBank(String who) {
+        Bank bankToDelete = new Bank(who);
+        Bank which = null;
+        // getting the right bank into the which variable
+        for (Bank b : banks) {
+            if (bankToDelete.equals(b)) {
+                which = b;
+            }
+        }
+        return which;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return "Module{" +
+                "id='" + id + '\'' +
+                ", banks=" + banks +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Module other = (Module)obj;
+
+
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
+}
