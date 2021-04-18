@@ -37,7 +37,6 @@ public class Application {
         // there must be modules
         System.out.println("4. List all the question banks for a specific module.");
         System.out.println("5. Remove a question from a bank.");
-        System.out.println("6. List all the banks");
         System.out.println("q - Quit");
     }
 
@@ -102,12 +101,15 @@ public class Application {
         // making the questions this way is only used here to provide data to work with
         Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
         Question newQuestion1 = new SingleChoice("SingleChoice", "Where do you live?", "The fuck bro");
-        Question newQuestion2 = new SingleChoice("SingleChoice", "Can I be your pet?", "THE FUCK BRO");
-        bank1.addNewQuestion(newQuestion);
-        bank1.addNewQuestion(newQuestion1);
-        bank1.addNewQuestion(newQuestion2);
-        bank2.addNewQuestion(newQuestion1);
-        bank2.addNewQuestion(newQuestion2);
+
+        Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
+        Question newQuestionPL1 = new SingleChoice("SingleChoice", "pytanko dwa", "odpowiedz dwa");
+
+        bank1.addNewQuestion(newQuestion, "ENG");
+        bank1.addNewQuestion(newQuestion1, "ENG");
+        bank1.addNewQuestion(newQuestionPL, "PL");
+        bank1.addNewQuestion(newQuestionPL1, "PL");
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,8 +141,15 @@ public class Application {
 
         if (which != null) {
             Question newQuestion = new SingleChoice();
+            System.out.println("Enter the question in english:");
             newQuestion.readKeyboard();
-            which.addNewQuestion(newQuestion);
+            which.addNewQuestion(newQuestion, "ENG");
+
+            newQuestion = new SingleChoice();
+
+            System.out.println("Enter the question in polish:");
+            newQuestion.readKeyboard();
+            which.addNewQuestion(newQuestion, "PL");
         } else {
             System.err.println("This bank does not exist.");
         }
@@ -172,9 +181,9 @@ public class Application {
      * Listing all the questions for a specific bank
      */
     public void listQuestions(Bank which) {
-        if (which != null && which.getQuestions().size() != 0) {
+        if (which != null && which.getQuestionsEng().size() != 0) {
             System.out.println(which.listQuestions());
-        } else if (which != null && which.getQuestions().size() == 0) {
+        } else if (which != null && which.getQuestionsEng().size() == 0) {
             System.err.println("This bank has no questions.");
         } else {
             System.err.println("This bank does not exist.");
@@ -188,10 +197,10 @@ public class Application {
         listBanks();
         System.out.println("Enter the ID of the bank that you want to delete:");
         Bank which = searchForBank(scan.nextLine());
-        if (which != null && which.getQuestions().size() == 0) {
+        if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPl().size() == 0) {
             banks.remove(which);
             System.out.println("Removed: " + which.getID());
-        } else if (which != null && which.getQuestions().size() != 0) {
+        } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPl().size() != 0) {
             System.err.println("This bank is not empty.");
         } else {
             System.err.println("This bank does not exist.");

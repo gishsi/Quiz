@@ -30,8 +30,6 @@ public class SingleChoice extends Question{
 
     public void addPossibleAnswer() {
         Scanner scan = new Scanner(System.in);
-        // needs to be (0, 10>
-        // needs to be a string
         String posAns = "";
         String nextAns = "";
         do {
@@ -55,12 +53,34 @@ public class SingleChoice extends Question{
         addPossibleAnswer();
         System.out.println("Enter the correct answer");
         // I guess this try could be omitted? Could not find an exception
-        try {
-            this.correctAnswer = scan.nextLine();
-        } catch (InputMismatchException e) {
-            e.printStackTrace();
+
+        // Check if there is an answer that matches the possible answers
+        boolean answerExists = false;
+        while(!answerExists) {
+            String answer = scan.nextLine();
+            if(checkAnswer(answer)) {
+                this.correctAnswer = answer;
+                answerExists = true;
+            } else {
+                System.out.println("Enter a correct answer that matches one of the possible answers:");
+                answerExists = false;
+            }
         }
     }
+
+    /**
+     * Checks if the correct answer already existed in the possible answers array
+     * @return true if it does and allows the creation of the question
+     */
+    private boolean checkAnswer(String answer) {
+        for (String posAns: possibleAnswers) {
+            if(posAns.equals(answer)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public String toString() {

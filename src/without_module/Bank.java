@@ -4,13 +4,15 @@ import java.util.*;
 
 public class Bank {
     private String ID;
-    private List<Question> questions;
+    private List<Question> questionsEng;
+    private List<Question> questionsPl;
 
     /**
      * No argument constructor
      */
     public Bank() {
-        questions = new ArrayList<>();
+        questionsEng = new ArrayList<>();
+        questionsPl = new ArrayList<>();
         ID = "No ID";
     }
 
@@ -18,7 +20,8 @@ public class Bank {
      * Constructor that allows us to make a new Bank
      */
     public Bank(String ID) {
-        questions = new ArrayList<>();
+        questionsEng = new ArrayList<>();
+        questionsPl = new ArrayList<>();
         this.ID = ID;
     }
 
@@ -39,11 +42,18 @@ public class Bank {
     }
 
     /**
-     *  List all the questions from the bank
-     * @return questions
+     *  List all the questions in enligh from the bank
+     * @return questionsEng
      */
-    public List<Question> getQuestions() {
-        return questions;
+    public List<Question> getQuestionsEng() {
+        return questionsEng;
+    }
+    /**
+     *  List all the questions in polish from the bank
+     * @return questionsPl
+     */
+    public List<Question> getQuestionsPl() {
+        return questionsPl;
     }
 
     /**
@@ -63,13 +73,23 @@ public class Bank {
     /**
      * Add a new question
      */
-    public void addNewQuestion(Question newQuestion) {
-        if (newQuestion != null) {
-            questions.add(newQuestion);
+    public void addNewQuestion(Question newQuestion, String language) {
+        // switch case for different language arrays?
+        if (newQuestion != null && !language.equals("")) {
+            switch(language) {
+                case "ENG":
+                    questionsEng.add(newQuestion);
+                    break;
+                case "PL":
+                    questionsPl.add(newQuestion);
+                    break;
+                default:
+                    System.out.println("Something went wrong");
+                    break;
+            }
         } else {
             System.out.println("Failed to add the new question to the bank.");
         }
-
     }
 
     /**
@@ -81,23 +101,36 @@ public class Bank {
         StringBuilder sb = new StringBuilder();
         // helper to count (for printing only)
         int i = 1;
-        for (Question q : questions) {
-            sb.append("\n").append(i).append(". ").append(q.toString()).append("\n");
+        sb.append("Question in language one:");
+        for (Question q : questionsEng) {
+            // have another loop / while loop with an iterator for printing?
+            sb.append("\n").append(i).append(". ").append(q.toString());
+            i++;
+        }
+        i = 1;
+        sb.append("\n\nQuestion in language two:");
+        for (Question q : questionsPl) {
+            // have another loop / while loop with an iterator for printing?
+            sb.append("\n").append(i).append(". ").append(q.toString());
             i++;
         }
         return sb.toString();
     }
 
+    /**
+     * Removes a question - needs to be removing both english and welsh version
+     */
     public void removeQuestion() {
         System.out.println("Which question to remove?");
         Scanner scan = new Scanner(System.in);
         try {
             int question = Integer.parseInt(scan.nextLine());
             // questions are number 1 - question.size()
-            if(question <= questions.size() && question >= 1) {
-                questions.remove(question - 1);
+            if(question <= questionsEng.size() && question >= 1) {
+                // just add the other array in here as well
+                questionsEng.remove(question - 1);
+                questionsPl.remove(question - 1);
             }
-
         } catch(InputMismatchException e) {
             e.printStackTrace();
         }
