@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Application {
     private Scanner scan;
     private List<Module> modules;
-
+    private Module currentModule;
 
     /**
      * Constructor for the Application class
@@ -15,6 +15,7 @@ public class Application {
     public Application() {
         scan = new Scanner(System.in);
         modules = new ArrayList<>();
+        currentModule = new Module();
     }
 
     /////////////////////////////////////// MAIN ///////////////////////////////////////////
@@ -29,11 +30,13 @@ public class Application {
      * Print the menu
      */
     public void printMenu() {
+        System.out.println("These are your options: ");
         System.out.println("1. Create a new question bank.");
         System.out.println("2. Add a new question to an existing bank.");
         System.out.println("3. Delete a bank (must be empty).");
         System.out.println("4. List all the question banks for a specific module.");
         System.out.println("5. Remove a question from a bank.");
+        System.out.println("6. Pick another module to work on.");
         System.out.println("q - Quit");
     }
 
@@ -42,45 +45,29 @@ public class Application {
      */
     public void runMenu() {
         String option = "";
-        Module module = null;
-        boolean isModuleCorrect = false;
         System.out.println("Welcome to the Quiz application (Teacher)");
-        printModules();
-        System.out.println("Which module would you like to work on?");
-
-
-        while(!isModuleCorrect) {
-            String moduleID = scan.nextLine().toUpperCase();
-            if(!moduleID.equals("")) {
-                if(pickModule(moduleID)!=null) {
-                    module = pickModule(moduleID);
-                    isModuleCorrect = true;
-                } else {
-                    printModules();
-                    System.out.println("Choose module again: ");
-                }
-            }
-        }
-
-        System.out.println("These are your options: ");
+        pickModule();
         do {
             printMenu();
             option = scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
-                    module.addBank();
+                    currentModule.addBank();
                     break;
                 case "2":
-                    module.addQuestion();
+                    addQuestion();
                     break;
                 case "3":
-                    module.deleteBank();
+                    currentModule.deleteBank();
                     break;
                 case "4":
-                    module.listBanks();
+                    currentModule.listBanks();
                     break;
                 case "5":
-                    removeQuestion(module);
+                    removeQuestion();
+                    break;
+                case "6":
+                    pickModule();
                     break;
                 case "Q":
                     break;
@@ -101,7 +88,6 @@ public class Application {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Method that runs tests in our application so that main could be as short as possible
      */
@@ -109,20 +95,36 @@ public class Application {
         load();
     }
 
+    public void pickModule() {
+        printModules();
+        boolean isModuleCorrect = false;
+        System.out.println("Which module would you like to associate your new bank to");
+        while(!isModuleCorrect) {
+            String moduleID = scan.nextLine().toUpperCase();
+            if(!moduleID.equals("")) {
+                if(pickModule(moduleID)!=null) {
+                    currentModule = pickModule(moduleID);
+                    isModuleCorrect = true;
+                } else {
+                    printModules();
+                    System.out.println("Choose module again: ");
+                }
+            }
+        }
+    }
+
     /**
      * Remove a question
-     *
-     * @param module - the module we are working on
      */
-    public void removeQuestion(Module module) {
+    public void removeQuestion() {
         // list the banks
-        module.listBanks();
+        currentModule.listBanks();
         System.out.println("Pick a bank");
-        Bank which = module.searchForBank(scan.nextLine());
+        Bank which = currentModule.searchForBank(scan.nextLine());
         //list the questions for that bank
-        module.listQuestions(which);
+        currentModule.listQuestions(which);
         // remove the question
-        module.removeQuestion(which);
+        currentModule.removeQuestion(which);
     }
 
     /*
@@ -135,6 +137,15 @@ public class Application {
         }
         System.out.println(sb.toString());
     }
+
+    public void addQuestion() {
+        if(currentModule.getBanks().size() == 0) {
+            System.err.println("Cannot add a question to a bank that does not exist.");
+        } else {
+            currentModule.addQuestion();
+        }
+    }
+
 
     /**
      * Helper method for getting the banks

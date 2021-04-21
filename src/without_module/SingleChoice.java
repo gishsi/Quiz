@@ -8,6 +8,9 @@ import java.util.Scanner;
 public class SingleChoice extends Question{
     private List<String> possibleAnswers;
     private String correctAnswer;
+    private int answersCount = 0;
+    private static final int MAX_ANSWERS = 10;
+
 
     /**
      * No argument constructor
@@ -28,19 +31,24 @@ public class SingleChoice extends Question{
         this.correctAnswer = correctAnswer;
     }
 
+    /**
+     * Adding possible answers
+     */
     public void addPossibleAnswer() {
         Scanner scan = new Scanner(System.in);
         String posAns = "";
         String nextAns = "";
+
         do {
-            System.out.println("Enter a possible answer: ");
+            System.out.println("Enter a possible answer (up to 10): ");
             posAns = scan.nextLine();
             if(!posAns.equals("")) {
                 possibleAnswers.add(posAns);
             }
+            answersCount++;
             System.out.println("Another possible answer (Y / N)");
             nextAns = scan.nextLine().toUpperCase();
-        } while(!nextAns.equals("N"));
+        } while(!nextAns.equals("N") && answersCount < MAX_ANSWERS);
     }
 
     /**
@@ -49,11 +57,9 @@ public class SingleChoice extends Question{
     public void readKeyboard(){
         Scanner scan = new Scanner(System.in);
         super.readKeyboard();
-        // here i should read possible answers
         addPossibleAnswer();
+        System.out.println("=========================================");
         System.out.println("Enter the correct answer");
-        // I guess this try could be omitted? Could not find an exception
-
         // Check if there is an answer that matches the possible answers
         boolean answerExists = false;
         while(!answerExists) {

@@ -11,9 +11,7 @@ public class Bank {
      * No argument constructor
      */
     public Bank() {
-        questionsEng = new ArrayList<>();
-        questionsPl = new ArrayList<>();
-        ID = "No ID";
+        this("No id");
     }
 
     /**
@@ -77,10 +75,10 @@ public class Bank {
         // switch case for different language arrays?
         if (newQuestion != null && !language.equals("")) {
             switch(language) {
-                case "ENG":
+                case "english":
                     questionsEng.add(newQuestion);
                     break;
-                case "PL":
+                case "welsh":
                     questionsPl.add(newQuestion);
                     break;
                 default:

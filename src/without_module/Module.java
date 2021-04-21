@@ -9,12 +9,19 @@ public class Module {
     private List<Bank> banks;
     private Scanner scan;
 
+    public Module() {
+        this("No id");
+    }
+
     public Module(String id) {
-        this.id =id;
+        this.id = id;
         banks = new ArrayList<>();
         scan = new Scanner(System.in);
     }
 
+    /**
+     * Loads data from a database file
+     */
     public void load() {
         // a couple of banks for testing
         Bank bank1 = new Bank();
@@ -33,12 +40,17 @@ public class Module {
         Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
         Question newQuestionPL1 = new SingleChoice("SingleChoice", "pytanko dwa", "odpowiedz dwa");
 
-        bank1.addNewQuestion(newQuestion, "ENG");
-        bank1.addNewQuestion(newQuestion1, "ENG");
-        bank1.addNewQuestion(newQuestionPL, "PL");
-        bank1.addNewQuestion(newQuestionPL1, "PL");
+        bank1.addNewQuestion(newQuestion, "english");
+        bank1.addNewQuestion(newQuestion1, "english");
+        bank1.addNewQuestion(newQuestionPL, "welsh");
+        bank1.addNewQuestion(newQuestionPL1, "welsh");
     }
 
+    /**
+     * Used to get the ID of the module
+     *
+     * @return id of the module
+     */
     public String getId() {
         return id;
     }
@@ -53,6 +65,11 @@ public class Module {
             System.err.println("This bank does not exist.");
         }
     }
+
+    public List<Bank> getBanks() {
+        return banks;
+    }
+
     /**
      * Add a new question
      */
@@ -60,21 +77,40 @@ public class Module {
         listBanks();
         System.out.println("Pick a bank");
         Bank which = searchForBank(scan.nextLine());
+        Scanner scan = new Scanner(System.in);
+        String nextAns = "";
+        do {
+            if (which != null) {
+                System.out.println("Pick the type of the question ( s - single choice, fb - fill in the blanks):");
+                String type = scan.nextLine().toLowerCase();
+                switch (type) {
+                    case "s" -> {
+                        addquest(which, new SingleChoice(), "english");
+                        addquest(which, new SingleChoice(), "welsh");
+                    }
+                    case "fb" -> {
+                        addquest(which, new FillTheBlanks(), "english");
+                        addquest(which, new FillTheBlanks(), "welsh");
+                    }
+                    default -> System.err.println("Wrong type.");
+                }
+            } else {
+                System.err.println("This bank does not exist.");
+            }
+            System.out.println("Another question (Y / N)");
+            nextAns = scan.nextLine().toUpperCase();
+        } while (!nextAns.equals("N"));
+    }
 
-        if (which != null) {
-            Question newQuestion = new SingleChoice();
-            System.out.println("Enter the question in english:");
-            newQuestion.readKeyboard();
-            which.addNewQuestion(newQuestion, "ENG");
-
-            newQuestion = new SingleChoice();
-
-            System.out.println("Enter the question in polish:");
-            newQuestion.readKeyboard();
-            which.addNewQuestion(newQuestion, "PL");
-        } else {
-            System.err.println("This bank does not exist.");
-        }
+    /**
+     * @param which    - the current bank
+     * @param type     - type of the question
+     * @param language - language of the question
+     */
+    private void addquest(Bank which, Question type, String language) {
+        System.out.println("Enter the question in" + language);
+        type.readKeyboard();
+        which.addNewQuestion(type, language);
     }
 
     /**
@@ -160,7 +196,7 @@ public class Module {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        Module other = (Module)obj;
+        Module other = (Module) obj;
 
 
         if (id == null) {
