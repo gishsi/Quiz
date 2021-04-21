@@ -22,14 +22,13 @@ public class Application {
     public static void main(String[] args) {
         Application app = new Application();
         app.runTest();
-        app.runMenu();
     }
     /////////////////////////////////////// MENU ///////////////////////////////////////////
 
     /**
-     * Print the menu
+     * Print the menu for the teacher
      */
-    public void printMenu() {
+    public void printMenuTeacher() {
         System.out.println("These are your options: ");
         System.out.println("1. Create a new question bank.");
         System.out.println("2. Add a new question to an existing bank.");
@@ -41,14 +40,15 @@ public class Application {
     }
 
     /**
-     * Run the menu
+     * Run the menu for the teacher
      */
-    public void runMenu() {
+    public void runMenuTeacher() {
         String option = "";
         System.out.println("Welcome to the Quiz application (Teacher)");
+        System.out.println("Which module would you like to associate your new bank to");
         pickModule();
         do {
-            printMenu();
+            printMenuTeacher();
             option = scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
@@ -78,6 +78,51 @@ public class Application {
         } while (!(option.equals("Q")));
     }
 
+    /**
+     * Print the menu for the student
+     */
+    public void printMenuStudent() {
+        System.out.println("These are your options: ");
+        System.out.println("1. List banks.");
+        System.out.println("2. Pick a quiz.");
+        System.out.println("q - Quit");
+    }
+
+    /**
+     * Run the menu for the student
+     */
+    public void runMenuStudent() {
+        String option = "";
+        System.out.println("Welcome to the Quiz application (Student)");
+        System.out.println("Pick the module:");
+        pickModule();
+        // pick the language
+//        System.out.println("Pick the language you want to take the quiz in:");
+//        String lang = scan.nextLine();
+//        currentModule.pickTheLanguage(lang);
+
+        do {
+            printMenuStudent();
+            option = scan.nextLine().toUpperCase();
+            switch (option) {
+                case "1":
+                    // list question banks
+                    currentModule.listBanks();
+                    break;
+                case "2":
+                    // pick the quiz
+                    currentModule.pickBank();
+                    break;
+                case "Q":
+                    break;
+                default:
+                    System.out.println("Wrong choice");
+                    break;
+            }
+        } while (!(option.equals("Q")));
+    }
+
+
     ////////////////////////////////LOAD/////////////////////////////////////////////////////
     private void load() {
         Module cs123 = new Module("CS123");
@@ -86,13 +131,20 @@ public class Application {
         modules.add(cs107);
         modules.add(cs123);
     }
-
     /////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Method that runs tests in our application so that main could be as short as possible
      */
     public void runTest() {
         load();
+        System.out.println("Log in as: \n\tT - Teacher\n\tS - Student");
+        String log = scan.nextLine().toUpperCase();
+        switch (log) {
+            case "T" -> runMenuTeacher();
+            case "S" -> runMenuStudent();
+            // could add a case for quitting and change the q - quit to log out so that we can go back and forth S - T
+            default -> System.out.println("That account does not exist.");
+        }
     }
 
     /**
@@ -101,7 +153,7 @@ public class Application {
     public void pickModule() {
         printModules();
         boolean isModuleCorrect = false;
-        System.out.println("Which module would you like to associate your new bank to");
+
         while(!isModuleCorrect) {
             String moduleID = scan.nextLine().toUpperCase();
             if(!moduleID.equals("")) {
@@ -151,7 +203,6 @@ public class Application {
             currentModule.addQuestion();
         }
     }
-
 
     /**
      * Helper method for getting the module

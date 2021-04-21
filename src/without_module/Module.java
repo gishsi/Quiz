@@ -127,10 +127,14 @@ public class Module {
      */
     public void listBanks() {
         StringBuilder sb = new StringBuilder();
-        for (Bank bank : banks) {
-            sb.append(bank.getID()).append("\n");
+        if(banks.size() != 0) {
+            for (Bank bank : banks) {
+                sb.append(bank.getID()).append("\n");
+            }
+            System.out.println(sb.toString());
+        } else {
+            System.out.println("This module has no banks.");
         }
-        System.out.println(sb.toString());
     }
 
     /**
@@ -161,6 +165,18 @@ public class Module {
         } else {
             System.err.println("This bank does not exist.");
         }
+    }
+
+
+    /**
+     * Pick the bank / quiz
+     */
+    public void pickBank() {
+        System.out.println("Pick a quiz");
+        Scanner scan = new Scanner(System.in);
+        // which - the bank that the student picked
+        Bank which = searchForBank(scan.nextLine());
+        // questions to display????? WHY
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////

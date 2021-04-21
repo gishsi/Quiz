@@ -40,7 +40,7 @@ public class Bank {
     }
 
     /**
-     *  List all the questions in enligh from the bank
+     *  List all the questions in english from the bank
      * @return questionsEng
      */
     public List<Question> getQuestionsEng() {
