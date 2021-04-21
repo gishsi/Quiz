@@ -78,7 +78,7 @@ public class Application {
         } while (!(option.equals("Q")));
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////LOAD/////////////////////////////////////////////////////
     private void load() {
         Module cs123 = new Module("CS123");
         Module cs107 = new Module("CS107");
@@ -95,6 +95,9 @@ public class Application {
         load();
     }
 
+    /**
+     *  Allows us to pick the module and then also change it
+     */
     public void pickModule() {
         printModules();
         boolean isModuleCorrect = false;
@@ -102,8 +105,8 @@ public class Application {
         while(!isModuleCorrect) {
             String moduleID = scan.nextLine().toUpperCase();
             if(!moduleID.equals("")) {
-                if(pickModule(moduleID)!=null) {
-                    currentModule = pickModule(moduleID);
+                if(getModule(moduleID)!=null) {
+                    currentModule = getModule(moduleID);
                     isModuleCorrect = true;
                 } else {
                     printModules();
@@ -138,6 +141,9 @@ public class Application {
         System.out.println(sb.toString());
     }
 
+    /**
+     *  Adding a question function
+     */
     public void addQuestion() {
         if(currentModule.getBanks().size() == 0) {
             System.err.println("Cannot add a question to a bank that does not exist.");
@@ -148,11 +154,11 @@ public class Application {
 
 
     /**
-     * Helper method for getting the banks
+     * Helper method for getting the module
      *
      * @return the module we want to work on
      */
-    private Module pickModule(String moduleID) {
+    private Module getModule(String moduleID) {
         Module which = null;
         Module other = new Module(moduleID);
 
