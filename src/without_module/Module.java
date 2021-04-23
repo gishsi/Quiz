@@ -85,12 +85,12 @@ public class Module {
                 String type = scan.nextLine().toLowerCase();
                 switch (type) {
                     case "s" -> {
-                        addquest(which, new SingleChoice(), "english");
-                        addquest(which, new SingleChoice(), "welsh");
+                        createQuestion(which, new SingleChoice(), "english");
+                        createQuestion(which, new SingleChoice(), "welsh");
                     }
                     case "fb" -> {
-                        addquest(which, new FillTheBlanks(), "english");
-                        addquest(which, new FillTheBlanks(), "welsh");
+                        createQuestion(which, new FillTheBlanks(), "english");
+                        createQuestion(which, new FillTheBlanks(), "welsh");
                     }
                     default -> System.err.println("Wrong type.");
                 }
@@ -103,11 +103,12 @@ public class Module {
     }
 
     /**
+     *  This helper function helps to avoid code duplication with two languages
      * @param which    - the current bank
      * @param type     - type of the question
      * @param language - language of the question
      */
-    private void addquest(Bank which, Question type, String language) {
+    private void createQuestion(Bank which, Question type, String language) {
         System.out.println("Enter the question in" + language);
         type.readKeyboard();
         which.addNewQuestion(type, language);
@@ -137,7 +138,7 @@ public class Module {
             }
             System.out.println(sb.toString());
         } else {
-            System.out.println("This module has no banks.");
+            System.err.println("This module has no banks.");
         }
     }
 
@@ -159,27 +160,31 @@ public class Module {
      */
     public void deleteBank() {
         listBanks();
-        System.out.println("Enter the ID of the bank that you want to delete:");
-        Bank which = searchForBank(scan.nextLine());
-        if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPl().size() == 0) {
-            banks.remove(which);
-            System.out.println("Removed: " + which.getID());
-        } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPl().size() != 0) {
-            System.err.println("This bank is not empty.");
-        } else {
-            System.err.println("This bank does not exist.");
+        if(banks.size() != 0) {
+            System.out.println("Enter the ID of the bank that you want to delete:");
+            Bank which = searchForBank(scan.nextLine());
+            if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsWel().size() == 0) {
+                banks.remove(which);
+                System.out.println("Removed: " + which.getID());
+            } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsWel().size() != 0) {
+                System.err.println("This bank is not empty.");
+            } else {
+                System.err.println("This bank does not exist.");
+            }
         }
     }
 
 
     /**
-     * Pick the bank / quiz
+     *  Allows the user to take a quiz
      */
-    public void pickBank() {
+    public void takeQuiz() {
+        listBanks();
         System.out.println("Pick a quiz");
         Scanner scan = new Scanner(System.in);
         // which - the bank that the student picked
         Bank which = searchForBank(scan.nextLine());
+        // needs check if the picked bank is alright
         // questions to display????? WHY
     }
 
@@ -188,11 +193,11 @@ public class Module {
         Helper function to search for a bank, used for listing a questions in a bank and in deleting a bank
      */
     public Bank searchForBank(String who) {
-        Bank bankToDelete = new Bank(who);
+        Bank bank = new Bank(who);
         Bank which = null;
         // getting the right bank into the which variable
         for (Bank b : banks) {
-            if (bankToDelete.equals(b)) {
+            if (bank.equals(b)) {
                 which = b;
             }
         }

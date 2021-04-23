@@ -29,6 +29,7 @@ public class Application {
      * Print the menu for the teacher
      */
     public void printMenuTeacher() {
+        System.out.println("==========================================");
         System.out.println("These are your options: ");
         System.out.println("1. Create a new question bank.");
         System.out.println("2. Add a new question to an existing bank.");
@@ -49,6 +50,7 @@ public class Application {
         pickModule();
         do {
             printMenuTeacher();
+            System.out.println("Your choice: ");
             option = scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
@@ -82,9 +84,11 @@ public class Application {
      * Print the menu for the student
      */
     public void printMenuStudent() {
+        System.out.println("==========================================");
         System.out.println("These are your options: ");
         System.out.println("1. List banks.");
         System.out.println("2. Pick a quiz.");
+        System.out.println("3. Change the module.");
         System.out.println("q - Quit");
     }
 
@@ -111,7 +115,11 @@ public class Application {
                     break;
                 case "2":
                     // pick the quiz
-                    currentModule.pickBank();
+                    currentModule.takeQuiz();
+                    break;
+                case "3":
+                    // change the module
+                    pickModule();
                     break;
                 case "Q":
                     break;
@@ -197,8 +205,9 @@ public class Application {
      *  Adding a question function
      */
     public void addQuestion() {
+        // cannot add a question to module that has no banks
         if(currentModule.getBanks().size() == 0) {
-            System.err.println("Cannot add a question to a bank that does not exist.");
+            System.err.println("Cannot add a question if a module has no banks.");
         } else {
             currentModule.addQuestion();
         }

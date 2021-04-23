@@ -5,7 +5,7 @@ import java.util.*;
 public class Bank {
     private String ID;
     private List<Question> questionsEng;
-    private List<Question> questionsPl;
+    private List<Question> questionsWel;
 
     /**
      * No argument constructor
@@ -19,7 +19,7 @@ public class Bank {
      */
     public Bank(String ID) {
         questionsEng = new ArrayList<>();
-        questionsPl = new ArrayList<>();
+        questionsWel = new ArrayList<>();
         this.ID = ID;
     }
 
@@ -50,8 +50,8 @@ public class Bank {
      *  List all the questions in polish from the bank
      * @return questionsPl
      */
-    public List<Question> getQuestionsPl() {
-        return questionsPl;
+    public List<Question> getQuestionsWel() {
+        return questionsWel;
     }
 
     /**
@@ -81,7 +81,7 @@ public class Bank {
                     questionsEng.add(newQuestion);
                     break;
                 case "welsh":
-                    questionsPl.add(newQuestion);
+                    questionsWel.add(newQuestion);
                     break;
                 default:
                     System.out.println("Something went wrong");
@@ -109,7 +109,7 @@ public class Bank {
         }
         i = 1;
         sb.append("\n\nQuestion in language two:");
-        for (Question q : questionsPl) {
+        for (Question q : questionsWel) {
             // have another loop / while loop with an iterator for printing?
             sb.append("\n").append(i).append(". ").append(q.toString());
             i++;
@@ -124,15 +124,19 @@ public class Bank {
         System.out.println("Which question to remove?");
         Scanner scan = new Scanner(System.in);
         try {
-            int question = Integer.parseInt(scan.nextLine());
+            int questionNumber = Integer.parseInt(scan.nextLine());
             // questions are number 1 - question.size()
-            if(question <= questionsEng.size() && question >= 1) {
+            if(questionNumber <= questionsEng.size() && questionNumber >= 1) {
                 // just add the other array in here as well
-                questionsEng.remove(question - 1);
-                questionsPl.remove(question - 1);
+                System.out.println("Removed" + questionsEng.get(questionNumber - 1));
+                System.out.println("Removed" + questionsWel.get(questionNumber - 1));
+                questionsEng.remove(questionNumber - 1);
+                questionsWel.remove(questionNumber - 1);
+
             }
-        } catch(InputMismatchException e) {
-            e.printStackTrace();
+        } catch(InputMismatchException | NumberFormatException e) {
+            //e.printStackTrace();
+            System.err.println("Invalid question number");
         }
     }
 
