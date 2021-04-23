@@ -119,6 +119,10 @@ public class Module {
     public void addBank() {
         Bank newBank = new Bank();
         newBank.readKeyboard();
+        if(newBank.getID().equals("No id")) {
+            System.err.println("Could not create a new bank.");
+            return;
+        }
         banks.add(newBank);
     }
 

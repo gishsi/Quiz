@@ -61,11 +61,13 @@ public class Bank {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter the ID of the bank");
         // I guess this try could be omitted? Could not find an exception
-        try {
-            this.ID = scan.nextLine();
-        } catch (InputMismatchException e) {
-            e.printStackTrace();
+        String id = scan.nextLine();
+        // if the ID provided by user is an empty string it should not be used as the bank id
+        if(id.equals("")) {
+            System.err.println("ID cannot be empty.");
+            return;
         }
+        this.ID = id;
     }
 
     /**
