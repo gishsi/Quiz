@@ -26,6 +26,14 @@ public class Question {
     }
 
     /**
+     * Get the content of a question
+     * @return content - the question
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
      * Read the properties of the question
      */
     public void readKeyboard() {

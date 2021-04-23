@@ -1,8 +1,10 @@
 package without_module;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Application {
     private Scanner scan;
@@ -115,7 +117,7 @@ public class Application {
                     break;
                 case "2":
                     // pick the quiz
-                    currentModule.takeQuiz();
+                    takeQuiz();
                     break;
                 case "3":
                     // change the module
@@ -130,21 +132,11 @@ public class Application {
         } while (!(option.equals("Q")));
     }
 
-
-    ////////////////////////////////LOAD/////////////////////////////////////////////////////
-    private void load() {
-        Module cs123 = new Module("CS123");
-        Module cs107 = new Module("CS107");
-        cs123.load();
-        modules.add(cs107);
-        modules.add(cs123);
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Method that runs tests in our application so that main could be as short as possible
+     * The main menu that appears at the start of the program
      */
-    public void runTest() {
-        load();
+    public void runMenu() {
+        // MAIN MENU
         System.out.println("Log in as: \n\tT - Teacher\n\tS - Student");
         String log = scan.nextLine().toUpperCase();
         switch (log) {
@@ -155,17 +147,35 @@ public class Application {
         }
     }
 
+    ////////////////////////////////LOAD/////////////////////////////////////////////////////
+    private void load() {
+        Module cs123 = new Module("CS123");
+        Module cs107 = new Module("CS107");
+        cs123.load();
+        modules.add(cs107);
+        modules.add(cs123);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     *  Allows us to pick the module and then also change it
+     * Method that runs tests in our application so that main could be as short as possible
+     */
+    public void runTest() {
+        load();
+        runMenu();
+    }
+
+    /**
+     * Allows us to pick the module and then also change it
      */
     public void pickModule() {
         printModules();
         boolean isModuleCorrect = false;
 
-        while(!isModuleCorrect) {
+        while (!isModuleCorrect) {
             String moduleID = scan.nextLine().toUpperCase();
-            if(!moduleID.equals("")) {
-                if(getModule(moduleID)!=null) {
+            if (!moduleID.equals("")) {
+                if (getModule(moduleID) != null) {
                     currentModule = getModule(moduleID);
                     isModuleCorrect = true;
                 } else {
@@ -202,11 +212,11 @@ public class Application {
     }
 
     /**
-     *  Adding a question function
+     * Adding a question function
      */
     public void addQuestion() {
         // cannot add a question to module that has no banks
-        if(currentModule.getBanks().size() == 0) {
+        if (currentModule.getBanks().size() == 0) {
             System.err.println("Cannot add a question if a module has no banks.");
         } else {
             currentModule.addQuestion();
@@ -230,5 +240,63 @@ public class Application {
             }
         }
         return which;
+    }
+
+
+    /**
+     * Allows the user to take a quiz
+     */
+    public void takeQuiz() {
+        Scanner scan = new Scanner(System.in);
+        currentModule.listBanks();
+        System.out.println("Pick a quiz");
+        // which - the bank that the student picked
+        Bank which = scan.nextLine());
+        // needs check if the picked bank is alright
+        // questions to display????? WHY
+//        System.out.println("Number of questions to display: ");
+//        int numberOfQuestions = 0;
+//        try {
+//            numberOfQuestions = Integer.parseInt(scan.nextLine());
+//        } catch(InputMismatchException | NumberFormatException e) {
+//            System.err.println("Invalid number of questions input.");
+//        }
+
+        //displaying a question from the bank
+        //Question toDisplay = new Question();
+
+        // question number ?
+        // will depend on the language choice
+        List<Question> questions = which.getQuestionsEng();
+        // here probably counter should start the counter
+        // probably these will differ based on the type of the question :) just ot make things easier <3
+        long start = System.nanoTime();
+        for (Question q : questions) {
+            // the question
+            String currentQuestion = (questions.indexOf(q) + 1) + ". " + q.getContent();
+            System.out.println(currentQuestion);
+            System.out.println("Your answer: ");
+            String answer;
+            try {
+                answer = scan.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Wrong answer format.??");
+            }
+            // check if the answer was correct -> if increase score by 1
+            // console could be cleared here
+            currentQuestion = "";
+            System.out.println(currentQuestion);
+        }
+        long end = System.nanoTime();
+        long elapsedTime = end - start;
+        quizTime(elapsedTime);
+    }
+
+
+    /**
+     * This helper method calculates time for the quiz
+     */
+    private void quizTime(long elapsedTime) {
+        System.out.println("Time: "+ (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS)%60)+  ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS)%60) + ":"+ (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS))%60);
     }
 }

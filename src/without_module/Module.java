@@ -1,6 +1,7 @@
 package without_module;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -103,7 +104,8 @@ public class Module {
     }
 
     /**
-     *  This helper function helps to avoid code duplication with two languages
+     * This helper function helps to avoid code duplication with two languages
+     *
      * @param which    - the current bank
      * @param type     - type of the question
      * @param language - language of the question
@@ -120,7 +122,7 @@ public class Module {
     public void addBank() {
         Bank newBank = new Bank();
         newBank.readKeyboard();
-        if(newBank.getID().equals("No id")) {
+        if (newBank.getID().equals("No id")) {
             System.err.println("Could not create a new bank.");
             return;
         }
@@ -132,7 +134,7 @@ public class Module {
      */
     public void listBanks() {
         StringBuilder sb = new StringBuilder();
-        if(banks.size() != 0) {
+        if (banks.size() != 0) {
             for (Bank bank : banks) {
                 sb.append(bank.getID()).append("\n");
             }
@@ -160,7 +162,7 @@ public class Module {
      */
     public void deleteBank() {
         listBanks();
-        if(banks.size() != 0) {
+        if (banks.size() != 0) {
             System.out.println("Enter the ID of the bank that you want to delete:");
             Bank which = searchForBank(scan.nextLine());
             if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsWel().size() == 0) {
@@ -174,19 +176,6 @@ public class Module {
         }
     }
 
-
-    /**
-     *  Allows the user to take a quiz
-     */
-    public void takeQuiz() {
-        listBanks();
-        System.out.println("Pick a quiz");
-        Scanner scan = new Scanner(System.in);
-        // which - the bank that the student picked
-        Bank which = searchForBank(scan.nextLine());
-        // needs check if the picked bank is alright
-        // questions to display????? WHY
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     /*
