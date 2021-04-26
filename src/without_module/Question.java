@@ -33,6 +33,11 @@ public class Question {
         return content;
     }
 
+
+    public String getType() {
+        return type;
+    }
+
     /**
      * Read the properties of the question
      */
@@ -45,6 +50,14 @@ public class Question {
         } catch (InputMismatchException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Function overwritten in every sub-class, responsible for getting the correct answer to a question
+     * @return an empty string
+     */
+    public String getAnswer() {
+        return "";
     }
 
     /**

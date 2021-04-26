@@ -74,6 +74,15 @@ public class SingleChoice extends Question{
         }
     }
 
+
+    /**
+     *  Return the correct answer
+     * @return correctAnswer
+     */
+    public String getAnswer() {
+        return this.correctAnswer;
+    }
+
     /**
      * Checks if the correct answer already existed in the possible answers array
      * @return true if it does and allows the creation of the question

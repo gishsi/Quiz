@@ -10,15 +10,14 @@ public class FillTheBlanks extends Question{
      * No argument constructor
      */
     public FillTheBlanks() {
-        this("FillTheBlanks", "No content", "No answer");
+        this("FillTheBlanks", "No content");
     }
     /**
      * Constructor that allows us to make a new Single Choice question
      * @param content - Question
-     * @param correctAnswer - the answer
      * @param type  - type of the question for this specific subclass
      */
-    public FillTheBlanks(String type, String content, String correctAnswer) {
+    public FillTheBlanks(String type, String content) {
         this.type = "FillTheBlanks";
         this.content = content;
         blankWords = new ArrayList<>();
@@ -32,6 +31,19 @@ public class FillTheBlanks extends Question{
         this.addBlankWords();
     }
 
+    public List<String> getBlankWords() {
+        return blankWords;
+    }
+
+    public void setBlankWords(List<String> blankWords) {
+        this.blankWords = blankWords;
+    }
+
+
+
+    /**
+     * Adding the blank words
+     */
     public void addBlankWords() {
         Scanner scan = new Scanner(System.in);
         String blank = "";
@@ -47,5 +59,17 @@ public class FillTheBlanks extends Question{
             System.out.println("Another possible answer (Y / N)");
             nextAns = scan.nextLine().toUpperCase();
         } while(!nextAns.equals("N"));
+    }
+
+    /**
+     *  Returns the blank words separated by space
+     * @return blanks words
+     */
+    public String getAnswer() {
+        StringBuilder sb = new StringBuilder();
+        for (String b: blankWords) {
+            sb.append(b).append(" ");
+        }
+        return sb.toString();
     }
 }

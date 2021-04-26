@@ -138,7 +138,7 @@ public class Application {
     public void runMenu() {
         // MAIN MENU
         System.out.println("Log in as: \n\tT - Teacher\n\tS - Student");
-        String log = scan.nextLine().toUpperCase();
+        String log = "S";//scan.nextLine().toUpperCase();
         switch (log) {
             case "T" -> runMenuTeacher();
             case "S" -> runMenuStudent();
@@ -173,7 +173,7 @@ public class Application {
         boolean isModuleCorrect = false;
 
         while (!isModuleCorrect) {
-            String moduleID = scan.nextLine().toUpperCase();
+            String moduleID = "CS123";//scan.nextLine().toUpperCase();
             if (!moduleID.equals("")) {
                 if (getModule(moduleID) != null) {
                     currentModule = getModule(moduleID);
@@ -251,52 +251,78 @@ public class Application {
         currentModule.listBanks();
         System.out.println("Pick a quiz");
         // which - the bank that the student picked
-        Bank which = scan.nextLine());
+        Bank which = currentModule.searchForBank("Bank1");//scan.nextLine());
         // needs check if the picked bank is alright
-        // questions to display????? WHY
-//        System.out.println("Number of questions to display: ");
-//        int numberOfQuestions = 0;
-//        try {
-//            numberOfQuestions = Integer.parseInt(scan.nextLine());
-//        } catch(InputMismatchException | NumberFormatException e) {
-//            System.err.println("Invalid number of questions input.");
-//        }
-
-        //displaying a question from the bank
-        //Question toDisplay = new Question();
-
-        // question number ?
-        // will depend on the language choice
-        List<Question> questions = which.getQuestionsEng();
-        // here probably counter should start the counter
-        // probably these will differ based on the type of the question :) just ot make things easier <3
-        long start = System.nanoTime();
-        for (Question q : questions) {
-            // the question
-            String currentQuestion = (questions.indexOf(q) + 1) + ". " + q.getContent();
-            System.out.println(currentQuestion);
-            System.out.println("Your answer: ");
-            String answer;
-            try {
-                answer = scan.nextLine();
-            } catch (InputMismatchException e) {
-                System.out.println("Wrong answer format.??");
+        if (which != null) {
+            // the questions to be answered
+            List<Question> questions = null;
+            int Q = 0;
+            // asking about the language
+            System.out.println("Enter the preferred language (eg. english, welsh): ");
+            String language = "english";//scan.nextLine().toLowerCase();
+            if (!language.equals("")) {
+                switch (language) {
+                    case "english":
+                        // get the english array from bank
+                        questions = which.getQuestionsEng();
+                        break;
+                    case "welsh":
+                        // get the welsh array from bank
+                        questions = which.getQuestionsWel();
+                        break;
+                    default:
+                        System.out.println("Something went wrong");
+                        break;
+                }
+            } else {
+                System.out.println("Failed to add the new question to the bank.");
             }
-            // check if the answer was correct -> if increase score by 1
-            // console could be cleared here
-            currentQuestion = "";
-            System.out.println(currentQuestion);
+            if (questions != null) {
+                int tempQ = 0;
+                System.out.println("Number of questions to display: ");
+                try {
+                    tempQ = 2;//;Integer.parseInt(scan.nextLine());
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.err.println("Invalid input for questions number. Number of questions set to default (quiz size)");
+                }
+                if (tempQ > 0 && tempQ <= questions.size()) {
+                    Q = tempQ;
+                } else {
+                    Q = questions.size();
+                }
+                System.out.println("For SingleChoice questions: enter the whole answer.");
+                System.out.println("For FillInBlanks questions: enter the whole answer in one line, separated by spaces.");
+                // run the quiz
+                runQuiz(questions);
+            } else {
+                System.out.println("Bank not found, try again.");
+            }
+        } else {
+            System.err.println("No questions to be answered - something went wrong.");
+        }
+    }
+
+    /**
+     * Running the question itself
+     */
+    public void runQuiz(List<Question> questions) {
+        long start = System.nanoTime();
+        int score = 0;
+        for (Question q : questions) {
+            System.out.println((questions.indexOf(q) + 1) + ". " + q.getContent());
+            System.out.println("Your answer: ");
+            String answer = null;
+            answer = scan.nextLine();
+            if (answer != null) {
+                if (answer.equals(q.getAnswer())) {
+                    score++;
+                }
+            }
         }
         long end = System.nanoTime();
         long elapsedTime = end - start;
-        quizTime(elapsedTime);
-    }
-
-
-    /**
-     * This helper method calculates time for the quiz
-     */
-    private void quizTime(long elapsedTime) {
-        System.out.println("Time: "+ (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS)%60)+  ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS)%60) + ":"+ (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS))%60);
+        // SCORE
+        System.out.println("Time: " + (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS) % 60) + ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS) % 60) + ":" + (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS)) % 60);
+        System.out.println("Questions answered" + score);
     }
 }

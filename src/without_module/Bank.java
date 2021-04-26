@@ -74,7 +74,6 @@ public class Bank {
      * Add a new question
      */
     public void addNewQuestion(Question newQuestion, String language) {
-        // switch case for different language arrays?
         if (newQuestion != null && !language.equals("")) {
             switch(language) {
                 case "english":
@@ -99,7 +98,7 @@ public class Bank {
      */
     public String listQuestions() {
         StringBuilder sb = new StringBuilder();
-        // helper to count (for printing only)
+        // variable to count (for printing only)
         int i = 1;
         sb.append("Question in language one:");
         for (Question q : questionsEng) {

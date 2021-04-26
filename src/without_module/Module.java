@@ -36,10 +36,9 @@ public class Module {
         banks.add(bank3);
         // making the questions this way is only used here to provide data to work with
         Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
-        Question newQuestion1 = new SingleChoice("SingleChoice", "Where do you live?", "The fuck bro");
-
+        Question newQuestion1 = new FillTheBlanks("FillTheBlanks", "Where do you live?");
         Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
-        Question newQuestionPL1 = new SingleChoice("SingleChoice", "pytanko dwa", "odpowiedz dwa");
+        Question newQuestionPL1 = new FillTheBlanks("FillTheBlanks", "pytanko dwa");
 
         bank1.addNewQuestion(newQuestion, "english");
         bank1.addNewQuestion(newQuestion1, "english");
