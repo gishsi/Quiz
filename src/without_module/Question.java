@@ -61,6 +61,13 @@ public class Question {
     }
 
     /**
+     * Displays the appropriate form of each question
+     */
+    public void display() {
+        System.out.println(this.content);
+    }
+
+    /**
      * toString method return information about a question
      * @return
      */

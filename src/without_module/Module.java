@@ -1,9 +1,6 @@
 package without_module;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Module {
     private String id;
@@ -36,11 +33,16 @@ public class Module {
         banks.add(bank3);
         // making the questions this way is only used here to provide data to work with
         Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
-        Question newQuestion1 = new FillTheBlanks("FillTheBlanks", "Where do you live?");
+        SingleChoice newQ = (SingleChoice) newQuestion;
+        List<String> list = Arrays.asList("Blue", "Yellow", "Green");
+        newQ.setPossibleAnswers(list);
+        FillTheBlanks newQuestion1 = new FillTheBlanks("FillTheBlanks", "Wadad___ada_");
+        List<String> list1 = Arrays.asList("aaa", "d");
+        newQuestion1.setBlankWords(list1);
         Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
         Question newQuestionPL1 = new FillTheBlanks("FillTheBlanks", "pytanko dwa");
 
-        bank1.addNewQuestion(newQuestion, "english");
+        bank1.addNewQuestion(newQ, "english");
         bank1.addNewQuestion(newQuestion1, "english");
         bank1.addNewQuestion(newQuestionPL, "welsh");
         bank1.addNewQuestion(newQuestionPL1, "welsh");

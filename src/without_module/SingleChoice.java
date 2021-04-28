@@ -96,9 +96,23 @@ public class SingleChoice extends Question{
         return false;
     }
 
+    /**
+     *  Display the possible answers and the content of the question
+     */
+    public void display() {
+        System.out.println(this.content);
+        for (String pos: possibleAnswers) {
+            System.out.println(pos);
+        }
+    }
+
+    public void setPossibleAnswers(List<String> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
 
     @Override
     public String toString() {
         return super.toString() + ", correct answer to that question: " + correctAnswer;
     }
+
 }

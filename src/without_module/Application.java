@@ -1,9 +1,6 @@
 package without_module;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Application {
@@ -102,11 +99,6 @@ public class Application {
         System.out.println("Welcome to the Quiz application (Student)");
         System.out.println("Pick the module:");
         pickModule();
-        // pick the language
-//        System.out.println("Pick the language you want to take the quiz in:");
-//        String lang = scan.nextLine();
-//        currentModule.pickTheLanguage(lang);
-
         do {
             printMenuStudent();
             option = scan.nextLine().toUpperCase();
@@ -259,6 +251,7 @@ public class Application {
             int Q = 0;
             // asking about the language
             System.out.println("Enter the preferred language (eg. english, welsh): ");
+            // HARD CODED - DONT FORHGET TO CHANGE
             String language = "english";//scan.nextLine().toLowerCase();
             if (!language.equals("")) {
                 switch (language) {
@@ -281,6 +274,7 @@ public class Application {
                 int tempQ = 0;
                 System.out.println("Number of questions to display: ");
                 try {
+                    // HARD CODED - DONT FORHGET TO CHANGE
                     tempQ = 2;//;Integer.parseInt(scan.nextLine());
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.err.println("Invalid input for questions number. Number of questions set to default (quiz size)");
@@ -293,7 +287,7 @@ public class Application {
                 System.out.println("For SingleChoice questions: enter the whole answer.");
                 System.out.println("For FillInBlanks questions: enter the whole answer in one line, separated by spaces.");
                 // run the quiz
-                runQuiz(questions);
+                runQuiz(questions, Q);
             } else {
                 System.out.println("Bank not found, try again.");
             }
@@ -305,24 +299,105 @@ public class Application {
     /**
      * Running the question itself
      */
-    public void runQuiz(List<Question> questions) {
+    public void runQuiz(List<Question> questions, int Q) {
         long start = System.nanoTime();
         int score = 0;
-        for (Question q : questions) {
-            System.out.println((questions.indexOf(q) + 1) + ". " + q.getContent());
-            System.out.println("Your answer: ");
-            String answer = null;
-            answer = scan.nextLine();
-            if (answer != null) {
-                if (answer.equals(q.getAnswer())) {
-                    score++;
-                }
+        String option = "";
+        int questionNumber = 0;
+        int answeredQuestions = 0;
+
+
+        do {
+            System.out.println("===============================================================");
+            displayQuestion(questions, questionNumber);
+            printMenuQuiz();
+            option = scan.nextLine().toUpperCase();
+            switch (option) {
+                case "1":
+                    //answer
+                    // i should not be changing the question number in here
+                    boolean correct = answer(questions.get(questionNumber));
+                    answeredQuestions++;
+                    if (correct) {
+                        score++;
+                    }
+                    if ((questionNumber + 1) > questions.size() - 1) {
+                        System.out.println("That is the last question");
+                    } else {
+                        questionNumber++;
+                    }
+                    break;
+                case "2":
+                    // next question
+                    if ((questionNumber + 1) > questions.size() - 1) {
+                        System.out.println("That is the last question");
+                    } else {
+                        questionNumber++;
+                    }
+                    break;
+                case "3":
+                    // previous question
+                    if (questionNumber == 0) {
+                        System.out.println("That is the first question");
+                    } else {
+                        questionNumber--;
+                    }
+                    break;
+                case "Q":
+                    // quit
+                    break;
+                default:
+                    System.out.println("Wrong choice");
+                    break;
             }
-        }
+        } while (!(option.equals("Q")) && answeredQuestions < questions.size());
+        System.out.println("=================================================");
+        System.out.println("You have answered all of the questions.");
         long end = System.nanoTime();
         long elapsedTime = end - start;
         // SCORE
         System.out.println("Time: " + (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS) % 60) + ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS) % 60) + ":" + (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS)) % 60);
-        System.out.println("Questions answered" + score);
+        System.out.println("Questions answered: " + score);
+        System.out.println("Questions not answered: " + (Q - score));
+    }
+
+
+    /**
+     * @param q - the question to answer
+     * @return true if the answer was correct, false otherwise
+     */
+    private boolean answer(Question q) {
+        System.out.println("Your answer: ");
+        String answer = null;
+        answer = scan.nextLine();
+        if (answer != null) {
+            if (answer.equals(q.getAnswer())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Print the menu for the quiz
+     */
+    private void printMenuQuiz() {
+        System.out.println("===============================================================");
+        System.out.println("Your options: ");
+        System.out.println("1. Answer ");
+        System.out.println("2. Go to the next question ");
+        System.out.println("3. Go to the previous question");
+        System.out.println("Q. Quit the quiz");
+    }
+
+    /**
+     * Display the question
+     *
+     * @param questions - the questions we will be answering
+     * @param qNumber   - the number of the question to be displayed
+     */
+    private void displayQuestion(List<Question> questions, int qNumber) {
+        // question number
+        questions.get(qNumber).display();
     }
 }

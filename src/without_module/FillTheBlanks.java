@@ -27,7 +27,15 @@ public class FillTheBlanks extends Question{
     public void readKeyboard() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter the text, indicate the blanks with an underscore character (_):");
-        content = scan.nextLine();
+        boolean properFormat = false;
+        while (!properFormat) {
+            content = scan.nextLine();
+            if(!content.contains("_")) {
+                System.out.println("Text must have some blanks.");
+            } else {
+                properFormat = true;
+            }
+        }
         this.addBlankWords();
     }
 
@@ -62,14 +70,14 @@ public class FillTheBlanks extends Question{
     }
 
     /**
-     *  Returns the blank words separated by space
-     * @return blanks words
+     *  Blank words separated by a space
+     * @return the answer
      */
     public String getAnswer() {
         StringBuilder sb = new StringBuilder();
-        for (String b: blankWords) {
-            sb.append(b).append(" ");
+        for (String s: blankWords) {
+            sb.append(s).append(" ");
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 }
