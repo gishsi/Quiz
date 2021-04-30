@@ -1,0 +1,106 @@
+[
+  {
+    "id": "CS123",
+    "banks": [
+      {
+        "id": "Bank1",
+        "questionsEng": [
+          {
+            "type": "SingleChoice",
+            "content": "Do you like ice-cream?",
+            "answered": false,
+            "correctAnswer": "Yes",
+            "possibleAnswers": [
+              "No",
+              "Maybe",
+              "Yes"
+            ]
+          },
+          {
+            "type": "FillTheBlanks",
+            "content": "My favourite _____ is _____.",
+            "answered": false,
+            "blankWords": [
+              "drink",
+              "water"
+            ]
+          }
+        ],
+        "questionsWel": [
+          {
+            "type": "SingleChoice",
+            "content": "Lubisz lody?",
+            "answered": false,
+            "correctAnswer": "Tak",
+            "possibleAnswers": [
+              "Nie",
+              "Moze",
+              "Tak"
+            ]
+          },
+          {
+            "type": "FillTheBlanks",
+            "content": "Moje ulubione _____ to ____.",
+            "answered": false,
+            "blankWords": [
+              "picie",
+              "woda"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "CS107",
+    "banks": [
+      {
+        "id": "Bank1",
+        "questionsEng": [
+          {
+            "type": "SingleChoice",
+            "content": "Do you like ice-cream?",
+            "answered": false,
+            "correctAnswer": "Yes",
+            "possibleAnswers": [
+              "No",
+              "Maybe",
+              "Yes"
+            ]
+          },
+          {
+            "type": "FillTheBlanks",
+            "content": "My favourite _____ is _____.",
+            "answered": false,
+            "blankWords": [
+              "drink",
+              "water"
+            ]
+          }
+        ],
+        "questionsWel": [
+          {
+            "type": "SingleChoice",
+            "content": "Lubisz lody?",
+            "answered": false,
+            "correctAnswer": "Tak",
+            "possibleAnswers": [
+              "Nie",
+              "Moze",
+              "Tak"
+            ]
+          },
+          {
+            "type": "FillTheBlanks",
+            "content": "Moje ulubione _____ to ____.",
+            "answered": false,
+            "blankWords": [
+              "picie",
+              "woda"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

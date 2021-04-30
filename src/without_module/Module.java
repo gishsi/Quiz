@@ -1,51 +1,32 @@
 package without_module;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.*;
 
 public class Module {
+    @SerializedName("id")
     private String id;
+    @SerializedName("banks")
     private List<Bank> banks;
     private Scanner scan;
 
+    /**
+     * No arg constructor
+     */
     public Module() {
         this("No id");
     }
 
+    /**
+     * Creates a Module
+     *
+     * @param id - id of the module
+     */
     public Module(String id) {
         this.id = id;
         banks = new ArrayList<>();
         scan = new Scanner(System.in);
-    }
-
-    /**
-     * Loads data from a database file
-     */
-    public void load() {
-        // a couple of banks for testing
-        Bank bank1 = new Bank();
-        bank1.setID("Bank1");
-        Bank bank2 = new Bank();
-        bank2.setID("Bank2");
-        Bank bank3 = new Bank();
-        bank3.setID("Bank3");
-        banks.add(bank1);
-        banks.add(bank2);
-        banks.add(bank3);
-        // making the questions this way is only used here to provide data to work with
-        Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
-        SingleChoice newQ = (SingleChoice) newQuestion;
-        List<String> list = Arrays.asList("Blue", "Yellow", "Green");
-        newQ.setPossibleAnswers(list);
-        FillTheBlanks newQuestion1 = new FillTheBlanks("FillTheBlanks", "Wadad___ada_");
-        List<String> list1 = Arrays.asList("aaa", "d");
-        newQuestion1.setBlankWords(list1);
-        Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
-        Question newQuestionPL1 = new FillTheBlanks("FillTheBlanks", "pytanko dwa");
-
-        bank1.addNewQuestion(newQ, "english");
-        bank1.addNewQuestion(newQuestion1, "english");
-        bank1.addNewQuestion(newQuestionPL, "welsh");
-        bank1.addNewQuestion(newQuestionPL1, "welsh");
     }
 
     /**
@@ -61,13 +42,19 @@ public class Module {
      * Removes a question
      */
     public void removeQuestion(Bank which) {
-        if (which != null) {
+        if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsWel().size() != 0) {
             which.removeQuestion();
+        } else if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsWel().size() == 0) {
+            System.err.println("No questions to be removed.");
         } else {
             System.err.println("This bank does not exist.");
         }
     }
 
+    /**
+     * Get the banks of a certain module with all its information
+     * @return list of banks
+     */
     public List<Bank> getBanks() {
         return banks;
     }
@@ -112,7 +99,7 @@ public class Module {
      * @param language - language of the question
      */
     private void createQuestion(Bank which, Question type, String language) {
-        System.out.println("Enter the question in" + language);
+        System.out.println("Enter the question in " + language);
         type.readKeyboard();
         which.addNewQuestion(type, language);
     }

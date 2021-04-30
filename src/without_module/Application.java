@@ -1,5 +1,14 @@
 package without_module;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +16,7 @@ public class Application {
     private Scanner scan;
     private List<Module> modules;
     private Module currentModule;
-
+    private RuntimeTypeAdapterFactory<Question> runtimeTypeAdapterFactory;
     /**
      * Constructor for the Application class
      */
@@ -15,15 +24,19 @@ public class Application {
         scan = new Scanner(System.in);
         modules = new ArrayList<>();
         currentModule = new Module();
+        runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
+                .of(Question.class, "type")
+                .registerSubtype(SingleChoice.class, "SingleChoice")
+                .registerSubtype(FillTheBlanks.class, "FillTheBlanks");
     }
 
     /////////////////////////////////////// MAIN ///////////////////////////////////////////
     public static void main(String[] args) {
         Application app = new Application();
-        app.runTest();
+        app.loadJson();
+        app.runMenu();
     }
-    /////////////////////////////////////// MENU ///////////////////////////////////////////
-
+    /////////////////////////////////////// MENUS ///////////////////////////////////////////
     /**
      * Print the menu for the teacher
      */
@@ -130,7 +143,7 @@ public class Application {
     public void runMenu() {
         // MAIN MENU
         System.out.println("Log in as: \n\tT - Teacher\n\tS - Student");
-        String log = "S";//scan.nextLine().toUpperCase();
+        String log = scan.nextLine().toUpperCase();
         switch (log) {
             case "T" -> runMenuTeacher();
             case "S" -> runMenuStudent();
@@ -140,22 +153,36 @@ public class Application {
     }
 
     ////////////////////////////////LOAD/////////////////////////////////////////////////////
-    private void load() {
-        Module cs123 = new Module("CS123");
-        Module cs107 = new Module("CS107");
-        cs123.load();
-        modules.add(cs107);
-        modules.add(cs123);
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
-     * Method that runs tests in our application so that main could be as short as possible
+     * This function is used to read data
      */
-    public void runTest() {
-        load();
-        runMenu();
+    private void loadJson()  {
+        // gson instance
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
+        // br instance - reading files
+        BufferedReader br = null;
+        try {
+            // get the file
+            br = new BufferedReader(new FileReader("db.json"));
+            // convert what you have read from the file to obj, needs the string that you have read from file and a class to map it to
+            // with a list of objects such as a modules we need to get the type first
+            Type foundListType = new TypeToken<ArrayList<Module>>(){}.getType();
+            modules = gson.fromJson(br, foundListType);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if(br!=null) {
+                try{
+                    br.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Allows us to pick the module and then also change it
@@ -165,7 +192,7 @@ public class Application {
         boolean isModuleCorrect = false;
 
         while (!isModuleCorrect) {
-            String moduleID = "CS123";//scan.nextLine().toUpperCase();
+            String moduleID = scan.nextLine().toUpperCase();
             if (!moduleID.equals("")) {
                 if (getModule(moduleID) != null) {
                     currentModule = getModule(moduleID);
@@ -223,7 +250,6 @@ public class Application {
     private Module getModule(String moduleID) {
         Module which = null;
         Module other = new Module(moduleID);
-
         if (!moduleID.equals("")) {
             for (Module m : modules) {
                 if (m.equals(other)) {
@@ -234,7 +260,6 @@ public class Application {
         return which;
     }
 
-
     /**
      * Allows the user to take a quiz
      */
@@ -243,7 +268,7 @@ public class Application {
         currentModule.listBanks();
         System.out.println("Pick a quiz");
         // which - the bank that the student picked
-        Bank which = currentModule.searchForBank("Bank1");//scan.nextLine());
+        Bank which = currentModule.searchForBank(scan.nextLine());
         // needs check if the picked bank is alright
         if (which != null) {
             // the questions to be answered
@@ -251,8 +276,7 @@ public class Application {
             int Q = 0;
             // asking about the language
             System.out.println("Enter the preferred language (eg. english, welsh): ");
-            // HARD CODED - DONT FORGET TO CHANGE
-            String language = "english";//scan.nextLine().toLowerCase();
+            String language = scan.nextLine().toLowerCase();
             if (!language.equals("")) {
                 // get the english array from bank
                 // get the welsh array from bank
@@ -268,8 +292,7 @@ public class Application {
                 int tempQ = 0;
                 System.out.println("Number of questions to display: ");
                 try {
-                    // HARD CODED - DONT FORGET TO CHANGE
-                    tempQ = 4;//;Integer.parseInt(scan.nextLine());
+                    tempQ = Integer.parseInt(scan.nextLine());
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.err.println("Invalid input for questions number. Number of questions set to default (quiz size)");
                 }
@@ -293,16 +316,16 @@ public class Application {
     /**
      * Answering a question - full process: random question, choices: 1: answer the question, 2: next question,
      * 3: previous question, 4: quit the quiz
+     * @param Q - questions to be displayed
+     * @param questions - list of quesions
      */
     public void answeringTheQuestion(List<Question> questions, int Q) {
         long start = System.nanoTime();
         int score = 0;
         String option = "";
         int answeredQuestions = 0;
-        questions.add(new SingleChoice("SingleChoice", "Who is the dumbest", "Amadeusz"));
-        questions.add(new SingleChoice("SingleChoice", "Who is the smartest", "Julia"));
-        questions.add(new SingleChoice("SingleChoice", "who is so dumb it hurts to see?", "Amadeusz"));
-        List<Integer> order = createRandomNumbers(Q);
+
+        List<Integer> order = createRandomOrder(Q);
         int questionNumber = 0;
         do {
             System.out.println("===============================================================");
@@ -405,7 +428,7 @@ public class Application {
     /**
      * This function provides a way of displaying questions in a random order
      */
-    private List<Integer> createRandomNumbers(int Q) {
+    private List<Integer> createRandomOrder(int Q) {
         // the list containing random numbers
         List<Integer> randomList = new ArrayList<>(Q);
         // first we give the list values in a sorted way

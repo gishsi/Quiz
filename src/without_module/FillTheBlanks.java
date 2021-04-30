@@ -1,10 +1,13 @@
 package without_module;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class FillTheBlanks extends Question{
+    @SerializedName("blankWords")
     private List<String> blankWords;
     /**
      * No argument constructor
@@ -75,7 +78,7 @@ public class FillTheBlanks extends Question{
                 blankWords.add(blank);
             }
             // this should not be here at all, the only check: while( blankWords.size() < blankWordsCount)
-            System.out.println("Another possible answer (Y / N)");
+            System.out.println("Another blank word? (Y / N)");
             nextAns = scan.nextLine().toUpperCase();
         } while(!nextAns.equals("N"));
     }
@@ -99,6 +102,6 @@ public class FillTheBlanks extends Question{
     @Override
     public String toString() {
         return super.toString() +
-                "blankWords: " + blankWords;
+                ", blankWords: " + blankWords;
     }
 }

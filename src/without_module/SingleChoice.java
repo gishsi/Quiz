@@ -1,13 +1,18 @@
 package without_module;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-public class SingleChoice extends Question{
+public class SingleChoice extends Question {
+    @SerializedName("possibleAnswers")
     private List<String> possibleAnswers;
+    @SerializedName("correctAnswer")
     private String correctAnswer;
+
     private int answersCount = 0;
     private static final int MAX_ANSWERS = 10;
 
@@ -18,11 +23,13 @@ public class SingleChoice extends Question{
     public SingleChoice() {
         this("SingleChoice", "No content", "No answer");
     }
+
     /**
      * Constructor that allows us to make a new Single Choice question
-     * @param content - Question
+     *
+     * @param content       - Question
      * @param correctAnswer - the answer
-     * @param type  - type of the question for this specific subclass
+     * @param type          - type of the question for this specific subclass
      */
     public SingleChoice(String type, String content, String correctAnswer) {
         possibleAnswers = new ArrayList<>();
@@ -42,20 +49,20 @@ public class SingleChoice extends Question{
         do {
             System.out.println("Enter a possible answer (up to 10): ");
             posAns = scan.nextLine();
-            if(!posAns.equals("")) {
+            if (!posAns.equals("")) {
                 possibleAnswers.add(posAns);
             }
             answersCount++;
             System.out.println("Another possible answer (Y / N)");
             nextAns = scan.nextLine().toUpperCase();
-        } while(!nextAns.equals("N") && answersCount < MAX_ANSWERS);
+        } while (!nextAns.equals("N") && answersCount < MAX_ANSWERS);
     }
 
     /**
      * A new readKeyboard for the Single Choice type
      */
     @Override
-    public void readKeyboard(){
+    public void readKeyboard() {
         Scanner scan = new Scanner(System.in);
         super.readKeyboard();
         addPossibleAnswer();
@@ -63,9 +70,9 @@ public class SingleChoice extends Question{
         System.out.println("Enter the correct answer");
         // Check if there is an answer that matches the possible answers
         boolean answerExists = false;
-        while(!answerExists) {
+        while (!answerExists) {
             String answer = scan.nextLine();
-            if(checkAnswer(answer)) {
+            if (checkAnswer(answer)) {
                 this.correctAnswer = answer;
                 answerExists = true;
             } else {
@@ -77,7 +84,8 @@ public class SingleChoice extends Question{
 
 
     /**
-     *  Return the correct answer
+     * Return the correct answer
+     *
      * @return correctAnswer
      */
     public String getAnswer() {
@@ -86,11 +94,12 @@ public class SingleChoice extends Question{
 
     /**
      * Checks if the correct answer already existed in the possible answers array
+     *
      * @return true if it does and allows the creation of the question
      */
     private boolean checkAnswer(String answer) {
-        for (String posAns: possibleAnswers) {
-            if(posAns.equals(answer)) {
+        for (String posAns : possibleAnswers) {
+            if (posAns.equals(answer)) {
                 return true;
             }
         }
@@ -98,17 +107,16 @@ public class SingleChoice extends Question{
     }
 
     /**
-     *  Display the possible answers and the content of the question
+     * Display the possible answers and the content of the question
      */
     @Override
     public String display() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.content);
-        System.out.println(this.content);
-        for (String pos: possibleAnswers) {
+        for (String pos : possibleAnswers) {
             sb.append("\n").append(pos);
         }
-        return  sb.toString();
+        return sb.toString();
     }
 
     public void setPossibleAnswers(List<String> possibleAnswers) {

@@ -1,11 +1,16 @@
 package without_module;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public abstract class Question {
+    @SerializedName("type")
     String type;
+    @SerializedName("content")
     String content;
+    @SerializedName("answered")
     boolean answered;
     /**
      * No arg constructor

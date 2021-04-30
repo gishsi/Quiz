@@ -1,0 +1,40 @@
+
+    private void load() {
+        Module cs123 = new Module("CS123");
+        Module cs107 = new Module("CS107");
+        cs123.load();
+        modules.add(cs107);
+        modules.add(cs123);
+    }
+
+    // module
+        /**
+         * Loads data from a database file
+         */
+        public void load() {
+            // a couple of banks for testing
+            Bank bank1 = new Bank();
+            bank1.setID("Bank1");
+            Bank bank2 = new Bank();
+            bank2.setID("Bank2");
+            Bank bank3 = new Bank();
+            bank3.setID("Bank3");
+            banks.add(bank1);
+            banks.add(bank2);
+            banks.add(bank3);
+            // making the questions this way is only used here to provide data to work with
+            Question newQuestion = new SingleChoice("SingleChoice", "What is your fav colour?", "Blue");
+            SingleChoice newQ = (SingleChoice) newQuestion;
+            List<String> list = Arrays.asList("Blue", "Yellow", "Green");
+            newQ.setPossibleAnswers(list);
+            FillTheBlanks newQuestion1 = new FillTheBlanks("FillTheBlanks", "Wadad___ada_");
+            List<String> list1 = Arrays.asList("aaa", "d");
+            newQuestion1.setBlankWords(list1);
+            Question newQuestionPL = new SingleChoice("SingleChoice", "simea", "o");
+            Question newQuestionPL1 = new FillTheBlanks("FillTheBlanks", "pytanko dwa");
+
+            bank1.addNewQuestion(newQ, "english");
+            bank1.addNewQuestion(newQuestion1, "english");
+            bank1.addNewQuestion(newQuestionPL, "welsh");
+            bank1.addNewQuestion(newQuestionPL1, "welsh");
+        }
