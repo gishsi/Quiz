@@ -3,7 +3,7 @@ package without_module;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Question {
+public abstract class Question {
     String type;
     String content;
     boolean answered;
@@ -13,16 +13,6 @@ public class Question {
     public Question() {
         type = "No type";
         content = "No content";
-    }
-
-    /**
-     * Constructor that allows us tot make a new question
-     * @param type - type of the question
-     * @param content - the question's content
-     */
-    public Question(String type, String content) {
-        this.type = type;
-        this.content = content;
     }
 
     public boolean isAnswered() {
@@ -39,11 +29,6 @@ public class Question {
      */
     public String getContent() {
         return content;
-    }
-
-
-    public String getType() {
-        return type;
     }
 
     /**
@@ -66,6 +51,10 @@ public class Question {
      */
     public String getAnswer() {
         return "";
+    }
+
+    public String display() {
+        return this.content;
     }
 
 

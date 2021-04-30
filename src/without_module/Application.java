@@ -254,18 +254,12 @@ public class Application {
             // HARD CODED - DONT FORGET TO CHANGE
             String language = "english";//scan.nextLine().toLowerCase();
             if (!language.equals("")) {
+                // get the english array from bank
+                // get the welsh array from bank
                 switch (language) {
-                    case "english":
-                        // get the english array from bank
-                        questions = which.getQuestionsEng();
-                        break;
-                    case "welsh":
-                        // get the welsh array from bank
-                        questions = which.getQuestionsWel();
-                        break;
-                    default:
-                        System.out.println("Something went wrong");
-                        break;
+                    case "english" -> questions = which.getQuestionsEng();
+                    case "welsh" -> questions = which.getQuestionsWel();
+                    default -> System.out.println("Something went wrong");
                 }
             } else {
                 System.out.println("Failed to add the new question to the bank.");
@@ -287,7 +281,7 @@ public class Application {
                 System.out.println("For SingleChoice questions: enter the whole answer.");
                 System.out.println("For FillInBlanks questions: enter the whole answer in one line, separated by spaces.");
                 // run the quiz
-                runQuiz(questions, Q);
+                answeringTheQuestion(questions, Q);
             } else {
                 System.out.println("Bank not found, try again.");
             }
@@ -297,9 +291,10 @@ public class Application {
     }
 
     /**
-     * Running the question itself
+     * Answering a question - full process: random question, choices: 1: answer the question, 2: next question,
+     * 3: previous question, 4: quit the quiz
      */
-    public void runQuiz(List<Question> questions, int Q) {
+    public void answeringTheQuestion(List<Question> questions, int Q) {
         long start = System.nanoTime();
         int score = 0;
         String option = "";
@@ -403,7 +398,7 @@ public class Application {
      */
     private void displayQuestion(List<Question> questions, int qNumber) {
         // question number
-        System.out.println((qNumber + 1) + ". " + questions.get(qNumber).getContent());
+        System.out.println((qNumber + 1) + ". " + questions.get(qNumber).display());
 
     }
 

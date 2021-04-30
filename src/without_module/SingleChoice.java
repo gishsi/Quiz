@@ -54,6 +54,7 @@ public class SingleChoice extends Question{
     /**
      * A new readKeyboard for the Single Choice type
      */
+    @Override
     public void readKeyboard(){
         Scanner scan = new Scanner(System.in);
         super.readKeyboard();
@@ -99,11 +100,15 @@ public class SingleChoice extends Question{
     /**
      *  Display the possible answers and the content of the question
      */
-    public void display() {
+    @Override
+    public String display() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.content);
         System.out.println(this.content);
         for (String pos: possibleAnswers) {
-            System.out.println(pos);
+            sb.append("\n").append(pos);
         }
+        return  sb.toString();
     }
 
     public void setPossibleAnswers(List<String> possibleAnswers) {

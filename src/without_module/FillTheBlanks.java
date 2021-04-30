@@ -23,6 +23,9 @@ public class FillTheBlanks extends Question{
         blankWords = new ArrayList<>();
     }
 
+    /**
+     * Used to create a FillInTheBlanks question
+     */
     @Override
     public void readKeyboard() {
         Scanner scan = new Scanner(System.in);
@@ -39,15 +42,23 @@ public class FillTheBlanks extends Question{
         this.addBlankWords();
     }
 
-    public List<String> getBlankWords() {
-        return blankWords;
-    }
-
+    /**
+     * Set the blankWords
+     * @param blankWords - the words to be entered
+     */
     public void setBlankWords(List<String> blankWords) {
         this.blankWords = blankWords;
     }
 
 
+    /**
+     * This is an overridden version of display() from the Question class
+     * @return the content of the question and the number of blank words inside it
+     */
+    @Override
+    public String display() {
+        return super.display() + "\nNumber of blank words: " + blankWords.size();
+    }
 
     /**
      * Adding the blank words
@@ -79,5 +90,15 @@ public class FillTheBlanks extends Question{
             sb.append(s).append(" ");
         }
         return sb.toString().trim();
+    }
+
+    /**
+     *  method to display information about a class
+     * @return content and blank words
+     */
+    @Override
+    public String toString() {
+        return super.toString() +
+                "blankWords: " + blankWords;
     }
 }
