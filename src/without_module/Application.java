@@ -251,7 +251,7 @@ public class Application {
             int Q = 0;
             // asking about the language
             System.out.println("Enter the preferred language (eg. english, welsh): ");
-            // HARD CODED - DONT FORHGET TO CHANGE
+            // HARD CODED - DONT FORGET TO CHANGE
             String language = "english";//scan.nextLine().toLowerCase();
             if (!language.equals("")) {
                 switch (language) {
@@ -274,8 +274,8 @@ public class Application {
                 int tempQ = 0;
                 System.out.println("Number of questions to display: ");
                 try {
-                    // HARD CODED - DONT FORHGET TO CHANGE
-                    tempQ = 2;//;Integer.parseInt(scan.nextLine());
+                    // HARD CODED - DONT FORGET TO CHANGE
+                    tempQ = 4;//;Integer.parseInt(scan.nextLine());
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.err.println("Invalid input for questions number. Number of questions set to default (quiz size)");
                 }
@@ -303,33 +303,38 @@ public class Application {
         long start = System.nanoTime();
         int score = 0;
         String option = "";
-        int questionNumber = 0;
         int answeredQuestions = 0;
-
-
+        questions.add(new SingleChoice("SingleChoice", "Who is the dumbest", "Amadeusz"));
+        questions.add(new SingleChoice("SingleChoice", "Who is the smartest", "Julia"));
+        questions.add(new SingleChoice("SingleChoice", "who is so dumb it hurts to see?", "Amadeusz"));
+        List<Integer> order = createRandomNumbers(Q);
+        int questionNumber = 0;
         do {
             System.out.println("===============================================================");
-            displayQuestion(questions, questionNumber);
+            displayQuestion(questions, order.get(questionNumber));
             printMenuQuiz();
             option = scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
                     //answer
-                    // i should not be changing the question number in here
-                    boolean correct = answer(questions.get(questionNumber));
-                    answeredQuestions++;
+                    Question current = questions.get(order.get(questionNumber));
+                    boolean correct = answer(current);
+                    if(current.isAnswered() == false) {
+                        answeredQuestions++;
+                    }
                     if (correct) {
                         score++;
                     }
-                    if ((questionNumber + 1) > questions.size() - 1) {
+                    if ((questionNumber + 1) > Q - 1) {
                         System.out.println("That is the last question");
                     } else {
                         questionNumber++;
                     }
+                    current.setAnswered(true);
                     break;
                 case "2":
                     // next question
-                    if ((questionNumber + 1) > questions.size() - 1) {
+                    if ((questionNumber + 1) > Q - 1) {
                         System.out.println("That is the last question");
                     } else {
                         questionNumber++;
@@ -349,10 +354,10 @@ public class Application {
                 default:
                     System.out.println("Wrong choice");
                     break;
-            }
-        } while (!(option.equals("Q")) && answeredQuestions < questions.size());
+            } //
+        } while (!(option.equals("Q")) && answeredQuestions < Q);
         System.out.println("=================================================");
-        System.out.println("You have answered all of the questions.");
+        System.out.println("End of the quiz.");
         long end = System.nanoTime();
         long elapsedTime = end - start;
         // SCORE
@@ -398,6 +403,21 @@ public class Application {
      */
     private void displayQuestion(List<Question> questions, int qNumber) {
         // question number
-        questions.get(qNumber).display();
+        System.out.println((qNumber + 1) + ". " + questions.get(qNumber).getContent());
+
+    }
+
+    /**
+     * This function provides a way of displaying questions in a random order
+     */
+    private List<Integer> createRandomNumbers(int Q) {
+        // the list containing random numbers
+        List<Integer> randomList = new ArrayList<>(Q);
+        // first we give the list values in a sorted way
+        for (int i = 0; i < Q; i++) {
+            randomList.add(i);
+        }
+        Collections.shuffle(randomList);
+        return randomList;
     }
 }

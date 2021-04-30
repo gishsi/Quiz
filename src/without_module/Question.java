@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Question {
     String type;
     String content;
-
+    boolean answered;
     /**
      * No arg constructor
      */
@@ -23,6 +23,14 @@ public class Question {
     public Question(String type, String content) {
         this.type = type;
         this.content = content;
+    }
+
+    public boolean isAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(boolean answered) {
+        this.answered = answered;
     }
 
     /**
@@ -60,12 +68,6 @@ public class Question {
         return "";
     }
 
-    /**
-     * Displays the appropriate form of each question
-     */
-    public void display() {
-        System.out.println(this.content);
-    }
 
     /**
      * toString method return information about a question
