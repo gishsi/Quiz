@@ -152,7 +152,7 @@ public class Application {
         }
     }
 
-    ////////////////////////////////LOAD/////////////////////////////////////////////////////
+    ////////////////////////////////LOAD AND SAVE/////////////////////////////////////////////////////
     /**
      * This function is used to read data
      */
@@ -180,6 +180,10 @@ public class Application {
                 }
             }
         }
+    }
+
+    private void save() {
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +328,7 @@ public class Application {
         int score = 0;
         String option = "";
         int answeredQuestions = 0;
-
+        final int SECONDS = 60;
         List<Integer> order = createRandomOrder(Q);
         int questionNumber = 0;
         do {
@@ -379,7 +383,7 @@ public class Application {
         long end = System.nanoTime();
         long elapsedTime = end - start;
         // SCORE
-        System.out.println("Time: " + (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS) % 60) + ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS) % 60) + ":" + (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS)) % 60);
+        System.out.println("Time: " + (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS) % SECONDS) + ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS) % SECONDS) + ":" + (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS)) % SECONDS);
         System.out.println("Questions answered: " + score);
         System.out.println("Questions not answered: " + (Q - score));
     }
