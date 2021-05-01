@@ -1,5 +1,6 @@
 package without_module;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 
 public class FillTheBlanks extends Question{
     @SerializedName("blankWords")
+    @Expose
     private List<String> blankWords;
     /**
      * No argument constructor

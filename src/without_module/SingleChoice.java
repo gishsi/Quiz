@@ -1,5 +1,6 @@
 package without_module;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -9,8 +10,10 @@ import java.util.Scanner;
 
 public class SingleChoice extends Question {
     @SerializedName("possibleAnswers")
+    @Expose
     private List<String> possibleAnswers;
     @SerializedName("correctAnswer")
+    @Expose
     private String correctAnswer;
 
     private int answersCount = 0;

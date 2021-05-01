@@ -1,15 +1,19 @@
 package without_module;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.*;
 
 public class Bank {
     @SerializedName("id")
+    @Expose
     private String ID;
     @SerializedName("questionsEng")
+    @Expose
     private List<Question> questionsEng;
     @SerializedName("questionsWel")
+    @Expose
     private List<Question> questionsWel;
 
     /**

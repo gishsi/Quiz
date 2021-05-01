@@ -1,15 +1,19 @@
 package without_module;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.*;
 
 public class Module {
+    private Scanner scan;
     @SerializedName("id")
+    @Expose
     private String id;
     @SerializedName("banks")
+    @Expose
     private List<Bank> banks;
-    private Scanner scan;
+
 
     /**
      * No arg constructor

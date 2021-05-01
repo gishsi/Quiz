@@ -14,7 +14,7 @@
             "correctAnswer": "Yes",
             "type": "SingleChoice",
             "content": "Do you like ice-cream?",
-            "answered": false
+            "answered": true
           },
           {
             "blankWords": [
@@ -23,7 +23,7 @@
             ],
             "type": "FillTheBlanks",
             "content": "My favourite _____ is _____.",
-            "answered": false
+            "answered": true
           }
         ],
         "questionsWel": [

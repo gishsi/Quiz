@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +14,9 @@ public class Application {
     private Scanner scan;
     private List<Module> modules;
     private Module currentModule;
+    private String filename;
     private RuntimeTypeAdapterFactory<Question> runtimeTypeAdapterFactory;
+
     /**
      * Constructor for the Application class
      */
@@ -33,10 +33,19 @@ public class Application {
     /////////////////////////////////////// MAIN ///////////////////////////////////////////
     public static void main(String[] args) {
         Application app = new Application();
-        app.loadJson();
+        boolean correct = false;
+        while(!correct) {
+            try {
+                app.initialise();
+                correct = true;
+            } catch(FileNotFoundException e) {
+                System.err.println("The file: " + app.filename + " does not exist.");
+            }
+        }
         app.runMenu();
     }
     /////////////////////////////////////// MENUS ///////////////////////////////////////////
+
     /**
      * Print the menu for the teacher
      */
@@ -84,6 +93,7 @@ public class Application {
                     pickModule();
                     break;
                 case "Q":
+                    save(filename);
                     break;
                 default:
                     System.out.println("Wrong choice");
@@ -153,39 +163,70 @@ public class Application {
     }
 
     ////////////////////////////////LOAD AND SAVE/////////////////////////////////////////////////////
+
     /**
      * This function is used to read data
      */
-    private void loadJson()  {
+    private void load(String filename) throws FileNotFoundException{
         // gson instance
-        Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
         // br instance - reading files
         BufferedReader br = null;
         try {
             // get the file
-            br = new BufferedReader(new FileReader("db.json"));
-            // convert what you have read from the file to obj, needs the string that you have read from file and a class to map it to
-            // with a list of objects such as a modules we need to get the type first
-            Type foundListType = new TypeToken<ArrayList<Module>>(){}.getType();
+            br = new BufferedReader(new FileReader(filename));
+            // with a list of objects such as  modules we need to get the type
+            Type foundListType = new TypeToken<ArrayList<Module>>() {
+            }.getType();
+            // convert what you have read from the file to obj
             modules = gson.fromJson(br, foundListType);
-
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new FileNotFoundException();
         } finally {
-            if(br!=null) {
-                try{
+            if (br != null) {
+                try {
                     br.close();
-                } catch(IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    private void save() {
+    /**
+     * Saving the modules to the database
+     */
+    public void save(String filename) {
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
+        Type foundListType = new TypeToken<List<Module>>() {
+        }.getType();
+        String jsonString = gson.toJson(modules, foundListType);
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(filename);
+            writer.write(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
+    public void initialise() throws FileNotFoundException {
+        System.out.println("Enter the filename (filename.json): ");
+        filename = scan.nextLine();
+        System.out.println("Filename: " + filename);
+        load(filename);
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -196,7 +237,7 @@ public class Application {
         boolean isModuleCorrect = false;
 
         while (!isModuleCorrect) {
-            String moduleID = scan.nextLine().toUpperCase();
+            String moduleID = "CS123";//scan.nextLine().toUpperCase();
             if (!moduleID.equals("")) {
                 if (getModule(moduleID) != null) {
                     currentModule = getModule(moduleID);
@@ -320,7 +361,8 @@ public class Application {
     /**
      * Answering a question - full process: random question, choices: 1: answer the question, 2: next question,
      * 3: previous question, 4: quit the quiz
-     * @param Q - questions to be displayed
+     *
+     * @param Q         - questions to be displayed
      * @param questions - list of quesions
      */
     public void answeringTheQuestion(List<Question> questions, int Q) {
@@ -333,7 +375,8 @@ public class Application {
         int questionNumber = 0;
         do {
             System.out.println("===============================================================");
-            displayQuestion(questions, order.get(questionNumber));
+            // display the question
+            System.out.println((order.get(questionNumber) + 1) + ". " + questions.get(order.get(questionNumber)).display());
             printMenuQuiz();
             option = scan.nextLine().toUpperCase();
             switch (option) {
@@ -341,7 +384,7 @@ public class Application {
                     //answer
                     Question current = questions.get(order.get(questionNumber));
                     boolean correct = answer(current);
-                    if(current.isAnswered() == false) {
+                    if (current.isAnswered() == false) {
                         answeredQuestions++;
                     }
                     if (correct) {
@@ -388,7 +431,6 @@ public class Application {
         System.out.println("Questions not answered: " + (Q - score));
     }
 
-
     /**
      * @param q - the question to answer
      * @return true if the answer was correct, false otherwise
@@ -415,18 +457,6 @@ public class Application {
         System.out.println("2. Go to the next question ");
         System.out.println("3. Go to the previous question");
         System.out.println("Q. Quit the quiz");
-    }
-
-    /**
-     * Display the question
-     *
-     * @param questions - the questions we will be answering
-     * @param qNumber   - the number of the question to be displayed
-     */
-    private void displayQuestion(List<Question> questions, int qNumber) {
-        // question number
-        System.out.println((qNumber + 1) + ". " + questions.get(qNumber).display());
-
     }
 
     /**
