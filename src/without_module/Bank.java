@@ -12,9 +12,9 @@ public class Bank {
     @SerializedName("questionsEng")
     @Expose
     private List<Question> questionsEng;
-    @SerializedName("questionsWel")
+    @SerializedName("questionsPL")
     @Expose
-    private List<Question> questionsWel;
+    private List<Question> questionsPL;
 
     /**
      * No argument constructor
@@ -28,7 +28,7 @@ public class Bank {
      */
     public Bank(String ID) {
         questionsEng = new ArrayList<>();
-        questionsWel = new ArrayList<>();
+        questionsPL = new ArrayList<>();
         this.ID = ID;
     }
 
@@ -59,8 +59,8 @@ public class Bank {
      *  List all the questions in polish from the bank
      * @return questionsPl
      */
-    public List<Question> getQuestionsWel() {
-        return questionsWel;
+    public List<Question> getQuestionsPL() {
+        return questionsPL;
     }
 
     /**
@@ -88,8 +88,8 @@ public class Bank {
                 case "english":
                     questionsEng.add(newQuestion);
                     break;
-                case "welsh":
-                    questionsWel.add(newQuestion);
+                case "polish":
+                    questionsPL.add(newQuestion);
                     break;
                 default:
                     System.out.println("Something went wrong");
@@ -117,7 +117,7 @@ public class Bank {
         }
         i = 1;
         sb.append("\n\nQuestion in language two:");
-        for (Question q : questionsWel) {
+        for (Question q : questionsPL) {
             // have another loop / while loop with an iterator for printing?
             sb.append("\n").append(i).append(". ").append(q.toString());
             i++;
@@ -126,7 +126,7 @@ public class Bank {
     }
 
     /**
-     * Removes a question - needs to be removing both english and welsh version
+     * Removes a question - needs to be removing both english and polish version
      */
     public void removeQuestion() {
         System.out.println("Which question to remove?");
@@ -137,14 +137,15 @@ public class Bank {
             if(questionNumber <= questionsEng.size() && questionNumber >= 1) {
                 // just add the other array in here as well
                 System.out.println("Removed" + questionsEng.get(questionNumber - 1));
-                System.out.println("Removed" + questionsWel.get(questionNumber - 1));
+                System.out.println("Removed" + questionsPL.get(questionNumber - 1));
                 questionsEng.remove(questionNumber - 1);
-                questionsWel.remove(questionNumber - 1);
-
+                questionsPL.remove(questionNumber - 1);
+            } else {
+                System.err.println("Wrong question number");
             }
         } catch(InputMismatchException | NumberFormatException e) {
             //e.printStackTrace();
-            System.err.println("Invalid question number");
+            System.err.println("Invalid input");
         }
     }
 

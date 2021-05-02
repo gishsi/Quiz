@@ -48,14 +48,16 @@ public class SingleChoice extends Question {
         Scanner scan = new Scanner(System.in);
         String posAns = "";
         String nextAns = "";
-
         do {
             System.out.println("Enter a possible answer (up to 10): ");
             posAns = scan.nextLine();
-            if (!posAns.equals("")) {
+            if (posAns.equals("")) {
+                System.out.println("Answer cannot be empty");
+            } else {
                 possibleAnswers.add(posAns);
+                answersCount++;
             }
-            answersCount++;
+
             System.out.println("Another possible answer (Y / N)");
             nextAns = scan.nextLine().toUpperCase();
         } while (!nextAns.equals("N") && answersCount < MAX_ANSWERS);

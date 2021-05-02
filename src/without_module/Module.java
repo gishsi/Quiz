@@ -46,9 +46,9 @@ public class Module {
      * Removes a question
      */
     public void removeQuestion(Bank which) {
-        if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsWel().size() != 0) {
+        if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPL().size() != 0) {
             which.removeQuestion();
-        } else if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsWel().size() == 0) {
+        } else if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPL().size() == 0) {
             System.err.println("No questions to be removed.");
         } else {
             System.err.println("This bank does not exist.");
@@ -57,6 +57,7 @@ public class Module {
 
     /**
      * Get the banks of a certain module with all its information
+     *
      * @return list of banks
      */
     public List<Bank> getBanks() {
@@ -69,30 +70,30 @@ public class Module {
     public void addQuestion() {
         listBanks();
         System.out.println("Pick a bank");
-        Bank which = searchForBank(scan.nextLine());
+        Bank which = searchForBank("Bank1"); //"Bank1"scan.nextLine()
         Scanner scan = new Scanner(System.in);
-        String nextAns = "";
-        do {
-            if (which != null) {
+        String nextQuestion = "";
+        if (which != null) {
+            do {
                 System.out.println("Pick the type of the question ( s - single choice, fb - fill in the blanks):");
                 String type = scan.nextLine().toLowerCase();
                 switch (type) {
                     case "s" -> {
                         createQuestion(which, new SingleChoice(), "english");
-                        createQuestion(which, new SingleChoice(), "welsh");
+                        createQuestion(which, new SingleChoice(), "polish");
                     }
                     case "fb" -> {
                         createQuestion(which, new FillTheBlanks(), "english");
-                        createQuestion(which, new FillTheBlanks(), "welsh");
+                        createQuestion(which, new FillTheBlanks(), "polish");
                     }
-                    default -> System.err.println("Wrong type.");
+                    default -> System.out.println("Wrong type.");
                 }
-            } else {
-                System.err.println("This bank does not exist.");
-            }
-            System.out.println("Another question (Y / N)");
-            nextAns = scan.nextLine().toUpperCase();
-        } while (!nextAns.equals("N"));
+                System.out.println("Another question (Y / N)");
+                nextQuestion = scan.nextLine().toUpperCase();
+            } while (!nextQuestion.equals("N"));
+        } else {
+            System.err.println("This bank does not exist.");
+        }
     }
 
     /**
@@ -118,6 +119,13 @@ public class Module {
             System.err.println("Could not create a new bank.");
             return;
         }
+        for (Bank b : banks) {
+            if (b.getID().equals(newBank.getID())) {
+                System.err.println("A bank with that ID already exists.");
+                return;
+            }
+        }
+        System.out.println("Added bank with id: " + newBank.getID());
         banks.add(newBank);
     }
 
@@ -157,10 +165,10 @@ public class Module {
         if (banks.size() != 0) {
             System.out.println("Enter the ID of the bank that you want to delete:");
             Bank which = searchForBank(scan.nextLine());
-            if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsWel().size() == 0) {
+            if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPL().size() == 0) {
                 banks.remove(which);
                 System.out.println("Removed: " + which.getID());
-            } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsWel().size() != 0) {
+            } else if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPL().size() != 0) {
                 System.err.println("This bank is not empty.");
             } else {
                 System.err.println("This bank does not exist.");

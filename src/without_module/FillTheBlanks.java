@@ -76,10 +76,13 @@ public class FillTheBlanks extends Question{
             // user should enter as many blank words as there were in the text
             System.out.println("Enter a blank word: ");
             blank = scan.nextLine();
-            if(!blank.equals("")) {
+            if (blank.equals("")) {
+                System.out.println("Blank cannot be empty");
+            } else if (blank.contains(" ")){
+                System.out.println("It must only be one word!");
+            } else{
                 blankWords.add(blank);
             }
-            // this should not be here at all, the only check: while( blankWords.size() < blankWordsCount)
             System.out.println("Another blank word? (Y / N)");
             nextAns = scan.nextLine().toUpperCase();
         } while(!nextAns.equals("N"));

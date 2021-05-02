@@ -1,106 +1,152 @@
 [
   {
-    "id": "CS123",
+    "id": "CS12320",
     "banks": [
       {
         "id": "Bank1",
         "questionsEng": [
           {
+            "possibleAnswers": [
+              "Mercury",
+              "Venus",
+              "Jupiter"
+            ],
+            "correctAnswer": "Mercury",
             "type": "SingleChoice",
-            "content": "Do you like ice-cream?",
-            "answered": false,
-            "correctAnswer": "Yes",
+            "content": "Which planet is closest to the sun?",
+            "answered": false
+          },
+          {
+            "blankWords": [
+              "Pluto",
+              "dwarf"
+            ],
+            "type": "FillTheBlanks",
+            "content": "In 2006 _____ has been reclassified to a _____ planet.",
+            "answered": false
+          }
+        ],
+        "questionsPL": [
+          {
+            "possibleAnswers": [
+              "Merkury",
+              "Wenus",
+              "Jowisz"
+            ],
+            "correctAnswer": "Merkury",
+            "type": "SingleChoice",
+            "content": "",
+            "answered": false
+          },
+          {
+            "blankWords": [
+              "Pluton",
+              "karlowata"
+            ],
+            "type": "FillTheBlanks",
+            "content": "W roku 2006 ______ zostal przeklasyfikowany do statusu planety _________.",
+            "answered": false
+          }
+        ]
+      },
+      {
+        "id": "Bank2",
+        "questionsEng": [
+          {
             "possibleAnswers": [
               "No",
               "Maybe",
               "Yes"
-            ]
+            ],
+            "correctAnswer": "Yes",
+            "type": "SingleChoice",
+            "content": "Do you like ice-cream?",
+            "answered": false
           },
           {
-            "type": "FillTheBlanks",
-            "content": "My favourite _____ is _____.",
-            "answered": false,
             "blankWords": [
               "drink",
               "water"
-            ]
+            ],
+            "type": "FillTheBlanks",
+            "content": "My favourite _____ is _____.",
+            "answered": false
           }
         ],
-        "questionsWel": [
+        "questionsPL": [
           {
-            "type": "SingleChoice",
-            "content": "Lubisz lody?",
-            "answered": false,
-            "correctAnswer": "Tak",
             "possibleAnswers": [
               "Nie",
               "Moze",
               "Tak"
-            ]
+            ],
+            "correctAnswer": "Tak",
+            "type": "SingleChoice",
+            "content": "Lubisz lody?",
+            "answered": false
           },
           {
-            "type": "FillTheBlanks",
-            "content": "Moje ulubione _____ to ____.",
-            "answered": false,
             "blankWords": [
               "picie",
               "woda"
-            ]
+            ],
+            "type": "FillTheBlanks",
+            "content": "Moje ulubione _____ to ____.",
+            "answered": false
+          }
+        ]
+      },
+      {
+        "id": "Bank3",
+        "questionsEng": [
+          {
+            "possibleAnswers": [
+              "No",
+              "Maybe",
+              "Yes"
+            ],
+            "correctAnswer": "Yes",
+            "type": "SingleChoice",
+            "content": "Do you like ice-cream?",
+            "answered": false
+          },
+          {
+            "blankWords": [
+              "drink",
+              "water"
+            ],
+            "type": "FillTheBlanks",
+            "content": "My favourite _____ is _____.",
+            "answered": false
+          }
+        ],
+        "questionsPL": [
+          {
+            "possibleAnswers": [
+              "Nie",
+              "Moze",
+              "Tak"
+            ],
+            "correctAnswer": "Tak",
+            "type": "SingleChoice",
+            "content": "Lubisz lody?",
+            "answered": false
+          },
+          {
+            "blankWords": [
+              "picie",
+              "woda"
+            ],
+            "type": "FillTheBlanks",
+            "content": "Moje ulubione _____ to ____.",
+            "answered": false
           }
         ]
       }
     ]
   },
   {
-    "id": "CS107",
-    "banks": [
-      {
-        "id": "Bank1",
-        "questionsEng": [
-          {
-            "type": "SingleChoice",
-            "content": "Do you like ice-cream?",
-            "answered": false,
-            "correctAnswer": "Yes",
-            "possibleAnswers": [
-              "No",
-              "Maybe",
-              "Yes"
-            ]
-          },
-          {
-            "type": "FillTheBlanks",
-            "content": "My favourite _____ is _____.",
-            "answered": false,
-            "blankWords": [
-              "drink",
-              "water"
-            ]
-          }
-        ],
-        "questionsWel": [
-          {
-            "type": "SingleChoice",
-            "content": "Lubisz lody?",
-            "answered": false,
-            "correctAnswer": "Tak",
-            "possibleAnswers": [
-              "Nie",
-              "Moze",
-              "Tak"
-            ]
-          },
-          {
-            "type": "FillTheBlanks",
-            "content": "Moje ulubione _____ to ____.",
-            "answered": false,
-            "blankWords": [
-              "picie",
-              "woda"
-            ]
-          }
-        ]
-      }
-    ]
+    "id": "CS10720",
+    "banks": []
   }
 ]

@@ -34,15 +34,16 @@ public class Application {
     public static void main(String[] args) {
         Application app = new Application();
         boolean correct = false;
-        while(!correct) {
+        while (!correct) {
             try {
                 app.initialise();
                 correct = true;
-            } catch(FileNotFoundException e) {
-                System.err.println("The file: " + app.filename + " does not exist.");
+            } catch (FileNotFoundException e) {
+                System.out.println("The file: " + app.filename + " does not exist.");
             }
         }
         app.runMenu();
+        System.out.println("\tEnd of the program");
     }
     /////////////////////////////////////// MENUS ///////////////////////////////////////////
 
@@ -72,7 +73,7 @@ public class Application {
         do {
             printMenuTeacher();
             System.out.println("Your choice: ");
-            option = scan.nextLine().toUpperCase();
+            option = "2";//scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
                     currentModule.addBank();
@@ -151,15 +152,25 @@ public class Application {
      * The main menu that appears at the start of the program
      */
     public void runMenu() {
+        String log = "";
         // MAIN MENU
-        System.out.println("Log in as: \n\tT - Teacher\n\tS - Student");
-        String log = scan.nextLine().toUpperCase();
-        switch (log) {
-            case "T" -> runMenuTeacher();
-            case "S" -> runMenuStudent();
-            // could add a case for quitting and change the q - quit to log out so that we can go back and forth S - T
-            default -> System.out.println("That account does not exist.");
-        }
+        do {
+            System.out.println("Log in as: \n\tT - Teacher\n\tS - Student\n\tQ - Quit");
+            log = "S";//scan.nextLine().toUpperCase();
+            switch (log) {
+                case "T":
+                    runMenuTeacher();
+                    break;
+                case "S":
+                    runMenuStudent();
+                    break;
+                case "Q":
+                    break;
+                default:
+                    System.err.println("That account does not exist.");
+                    break;
+            }
+        } while (!(log.equals("Q")));
     }
 
     ////////////////////////////////LOAD AND SAVE/////////////////////////////////////////////////////
@@ -167,7 +178,7 @@ public class Application {
     /**
      * This function is used to read data
      */
-    private void load(String filename) throws FileNotFoundException{
+    private void load(String filename) throws FileNotFoundException {
         // gson instance
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
         // br instance - reading files
@@ -223,7 +234,7 @@ public class Application {
 
     public void initialise() throws FileNotFoundException {
         System.out.println("Enter the filename (filename.json): ");
-        filename = scan.nextLine();
+        filename = "db.json";//scan.nextLine().toLowerCase(); //"db.json";//
         System.out.println("Filename: " + filename);
         load(filename);
     }
@@ -237,14 +248,16 @@ public class Application {
         boolean isModuleCorrect = false;
 
         while (!isModuleCorrect) {
-            String moduleID = "CS123";//scan.nextLine().toUpperCase();
+            String moduleID = scan.nextLine().toUpperCase();//"CS12320";//scan.nextLine().toUpperCase();
             if (!moduleID.equals("")) {
                 if (getModule(moduleID) != null) {
                     currentModule = getModule(moduleID);
+                    System.out.println("Using the " + moduleID + " module.");
                     isModuleCorrect = true;
                 } else {
-                    printModules();
+                    System.out.println("The module with the ID: " + moduleID + " does not exist in the database.");
                     System.out.println("Choose module again: ");
+                    printModules();
                 }
             }
         }
@@ -258,10 +271,12 @@ public class Application {
         currentModule.listBanks();
         System.out.println("Pick a bank");
         Bank which = currentModule.searchForBank(scan.nextLine());
-        //list the questions for that bank
-        currentModule.listQuestions(which);
-        // remove the question
-        currentModule.removeQuestion(which);
+        if(which!=null) {
+            currentModule.listQuestions(which);
+            currentModule.removeQuestion(which);
+        } else {
+            System.err.println("This bank does not exist.");
+        }
     }
 
     /*
@@ -313,22 +328,22 @@ public class Application {
         currentModule.listBanks();
         System.out.println("Pick a quiz");
         // which - the bank that the student picked
-        Bank which = currentModule.searchForBank(scan.nextLine());
+        Bank which = currentModule.searchForBank("Bank1"); //scan.nextLine()
         // needs check if the picked bank is alright
         if (which != null) {
             // the questions to be answered
             List<Question> questions = null;
             int Q = 0;
             // asking about the language
-            System.out.println("Enter the preferred language (eg. english, welsh): ");
-            String language = scan.nextLine().toLowerCase();
+            System.out.println("Enter the preferred language (eg. english, polish): ");
+            String language = "english";//scan.nextLine().toLowerCase(); //"english"//
             if (!language.equals("")) {
                 // get the english array from bank
-                // get the welsh array from bank
+                // get the polish array from bank
                 switch (language) {
                     case "english" -> questions = which.getQuestionsEng();
-                    case "welsh" -> questions = which.getQuestionsWel();
-                    default -> System.out.println("Something went wrong");
+                    case "polish" -> questions = which.getQuestionsPL();
+                    default -> System.out.println("Incorrect language choice.");
                 }
             } else {
                 System.out.println("Failed to add the new question to the bank.");
@@ -337,13 +352,14 @@ public class Application {
                 int tempQ = 0;
                 System.out.println("Number of questions to display: ");
                 try {
-                    tempQ = Integer.parseInt(scan.nextLine());
+                    tempQ = 2;//Integer.parseInt(scan.nextLine()); // 2
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.err.println("Invalid input for questions number. Number of questions set to default (quiz size)");
                 }
                 if (tempQ > 0 && tempQ <= questions.size()) {
                     Q = tempQ;
                 } else {
+                    System.out.println("The number: " + tempQ + " is bigger that the number of questions in the quiz. Number of questions set to default (quiz size).");
                     Q = questions.size();
                 }
                 System.out.println("For SingleChoice questions: enter the whole answer.");
@@ -351,10 +367,10 @@ public class Application {
                 // run the quiz
                 answeringTheQuestion(questions, Q);
             } else {
-                System.out.println("Bank not found, try again.");
+                System.out.println("Failed to take the quiz.");
             }
         } else {
-            System.err.println("No questions to be answered - something went wrong.");
+            System.err.println("Quiz not found.");
         }
     }
 
@@ -377,6 +393,7 @@ public class Application {
             System.out.println("===============================================================");
             // display the question
             System.out.println((order.get(questionNumber) + 1) + ". " + questions.get(order.get(questionNumber)).display());
+            System.out.println("Has this question been answered?: " + questions.get(order.get(questionNumber)).isAnswered());
             printMenuQuiz();
             option = scan.nextLine().toUpperCase();
             switch (option) {
