@@ -178,7 +178,7 @@ public class Application {
     /**
      * This function is used to read data
      */
-    private void load(String filename) throws FileNotFoundException {
+    public void load(String filename) throws FileNotFoundException {
         // gson instance
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
         // br instance - reading files
@@ -381,7 +381,7 @@ public class Application {
      * @param Q         - questions to be displayed
      * @param questions - list of quesions
      */
-    public void answeringTheQuestion(List<Question> questions, int Q) {
+    private void answeringTheQuestion(List<Question> questions, int Q) {
         long start = System.nanoTime();
         int score = 0;
         String option = "";

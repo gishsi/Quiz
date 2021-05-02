@@ -29,7 +29,7 @@ public class FillTheBlanks extends Question{
     }
 
     /**
-     * Used to create a FillInTheBlanks question
+     * Used to add properties to a question read from user
      */
     @Override
     public void readKeyboard() {
@@ -48,15 +48,6 @@ public class FillTheBlanks extends Question{
     }
 
     /**
-     * Set the blankWords
-     * @param blankWords - the words to be entered
-     */
-    public void setBlankWords(List<String> blankWords) {
-        this.blankWords = blankWords;
-    }
-
-
-    /**
      * This is an overridden version of display() from the Question class
      * @return the content of the question and the number of blank words inside it
      */
@@ -73,7 +64,6 @@ public class FillTheBlanks extends Question{
         String blank = "";
         String nextAns = "";
         do {
-            // user should enter as many blank words as there were in the text
             System.out.println("Enter a blank word: ");
             blank = scan.nextLine();
             if (blank.equals("")) {

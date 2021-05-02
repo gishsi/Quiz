@@ -100,7 +100,7 @@ public class SingleChoice extends Question {
     /**
      * Checks if the correct answer already existed in the possible answers array
      *
-     * @return true if it does and allows the creation of the question
+     * @return true if it does (allowing to create the question)
      */
     private boolean checkAnswer(String answer) {
         for (String posAns : possibleAnswers) {
@@ -122,10 +122,6 @@ public class SingleChoice extends Question {
             sb.append("\n").append(pos);
         }
         return sb.toString();
-    }
-
-    public void setPossibleAnswers(List<String> possibleAnswers) {
-        this.possibleAnswers = possibleAnswers;
     }
 
     @Override

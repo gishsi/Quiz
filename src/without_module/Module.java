@@ -176,10 +176,8 @@ public class Module {
         }
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    /*
-        Helper function to search for a bank, used for listing a questions in a bank and in deleting a bank
+    /**
+     * Helper function to search for a bank, used for listing a questions in a bank and in deleting a bank
      */
     public Bank searchForBank(String who) {
         Bank bank = new Bank(who);
@@ -192,8 +190,11 @@ public class Module {
         }
         return which;
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Information about a module
+     * @return string with module id and banks
+     */
     @Override
     public String toString() {
         return "Module{" +
@@ -202,6 +203,11 @@ public class Module {
                 '}';
     }
 
+    /**
+     * Used while searching for the right module
+     * @param obj
+     * @return true if found
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

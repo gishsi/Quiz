@@ -33,15 +33,6 @@ public class Bank {
     }
 
     /**
-     * Allows the user to set ID
-     *
-     * @param ID - the ID of the bank
-     */
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
-    /**
      * Get the banks ID
      */
     public String getID() {
@@ -111,14 +102,12 @@ public class Bank {
         int i = 1;
         sb.append("Question in language one:");
         for (Question q : questionsEng) {
-            // have another loop / while loop with an iterator for printing?
             sb.append("\n").append(i).append(". ").append(q.toString());
             i++;
         }
         i = 1;
         sb.append("\n\nQuestion in language two:");
         for (Question q : questionsPL) {
-            // have another loop / while loop with an iterator for printing?
             sb.append("\n").append(i).append(". ").append(q.toString());
             i++;
         }
@@ -150,11 +139,20 @@ public class Bank {
     }
 
 
+    /**
+     * Information about a bank
+     * @return BankID and the questions
+     */
     @Override
     public String toString() {
         return "BankID: " + this.ID + listQuestions();
     }
 
+    /**
+     * Used when searching for a particular bank
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

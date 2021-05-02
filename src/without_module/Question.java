@@ -72,10 +72,8 @@ public abstract class Question {
         return this.content;
     }
 
-
-
     /**
-     * toString method return information about a question
+     * toString method returns information about a question
      * @return
      */
     @Override
