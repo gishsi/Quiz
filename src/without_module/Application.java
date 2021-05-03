@@ -73,7 +73,7 @@ public class Application {
         do {
             printMenuTeacher();
             System.out.println("Your choice: ");
-            option = "2";//scan.nextLine().toUpperCase();
+            option = scan.nextLine().toUpperCase();
             switch (option) {
                 case "1":
                     currentModule.addBank();
@@ -156,7 +156,7 @@ public class Application {
         // MAIN MENU
         do {
             System.out.println("Log in as: \n\tT - Teacher\n\tS - Student\n\tQ - Quit");
-            log = "S";//scan.nextLine().toUpperCase();
+            log = scan.nextLine().toUpperCase();
             switch (log) {
                 case "T":
                     runMenuTeacher();
@@ -248,7 +248,7 @@ public class Application {
         boolean isModuleCorrect = false;
 
         while (!isModuleCorrect) {
-            String moduleID = scan.nextLine().toUpperCase();//"CS12320";//scan.nextLine().toUpperCase();
+            String moduleID = scan.nextLine().toUpperCase();
             if (!moduleID.equals("")) {
                 if (getModule(moduleID) != null) {
                     currentModule = getModule(moduleID);
@@ -267,15 +267,10 @@ public class Application {
      * Remove a question
      */
     public void removeQuestion() {
-        // list the banks
-        currentModule.listBanks();
-        System.out.println("Pick a bank");
-        Bank which = currentModule.searchForBank(scan.nextLine());
-        if(which!=null) {
-            currentModule.listQuestions(which);
-            currentModule.removeQuestion(which);
+        if (currentModule.getBanks().size() == 0) {
+            System.err.println("Cannot remove a question if a module has no banks.");
         } else {
-            System.err.println("This bank does not exist.");
+            currentModule.removeQuestion();
         }
     }
 
@@ -328,7 +323,7 @@ public class Application {
         currentModule.listBanks();
         System.out.println("Pick a quiz");
         // which - the bank that the student picked
-        Bank which = currentModule.searchForBank("Bank1"); //scan.nextLine()
+        Bank which = currentModule.searchForBank(scan.nextLine());
         // needs check if the picked bank is alright
         if (which != null) {
             // the questions to be answered
@@ -336,7 +331,7 @@ public class Application {
             int Q = 0;
             // asking about the language
             System.out.println("Enter the preferred language (eg. english, polish): ");
-            String language = "english";//scan.nextLine().toLowerCase(); //"english"//
+            String language = scan.nextLine().toLowerCase();
             if (!language.equals("")) {
                 // get the english array from bank
                 // get the polish array from bank
@@ -352,7 +347,7 @@ public class Application {
                 int tempQ = 0;
                 System.out.println("Number of questions to display: ");
                 try {
-                    tempQ = 2;//Integer.parseInt(scan.nextLine()); // 2
+                    tempQ = Integer.parseInt(scan.nextLine());
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.err.println("Invalid input for questions number. Number of questions set to default (quiz size)");
                 }
@@ -387,6 +382,7 @@ public class Application {
         String option = "";
         int answeredQuestions = 0;
         final int SECONDS = 60;
+        // random order of the questions
         List<Integer> order = createRandomOrder(Q);
         int questionNumber = 0;
         do {
@@ -400,18 +396,16 @@ public class Application {
                 case "1":
                     //answer
                     Question current = questions.get(order.get(questionNumber));
+                    // returns true if Student was correct
                     boolean correct = answer(current);
+                    // Will not allow user to gain points on one question
                     if (current.isAnswered() == false) {
                         answeredQuestions++;
                     }
                     if (correct) {
                         score++;
                     }
-                    if ((questionNumber + 1) > Q - 1) {
-                        System.out.println("That is the last question");
-                    } else {
-                        questionNumber++;
-                    }
+                    // Mark the question as answered
                     current.setAnswered(true);
                     break;
                 case "2":

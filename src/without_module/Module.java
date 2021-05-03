@@ -45,7 +45,11 @@ public class Module {
     /**
      * Removes a question
      */
-    public void removeQuestion(Bank which) {
+    public void removeQuestion() {
+        // list the banks
+        listBanks();
+        System.out.println("Pick a bank");
+        Bank which = searchForBank(scan.nextLine());
         if (which != null && which.getQuestionsEng().size() != 0 && which.getQuestionsPL().size() != 0) {
             which.removeQuestion();
         } else if (which != null && which.getQuestionsEng().size() == 0 && which.getQuestionsPL().size() == 0) {
@@ -70,7 +74,7 @@ public class Module {
     public void addQuestion() {
         listBanks();
         System.out.println("Pick a bank");
-        Bank which = searchForBank("Bank1"); //"Bank1"scan.nextLine()
+        Bank which = searchForBank(scan.nextLine());
         Scanner scan = new Scanner(System.in);
         String nextQuestion = "";
         if (which != null) {

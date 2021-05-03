@@ -16,13 +16,7 @@ public abstract class Question {
     @SerializedName("answered")
     @Expose
     boolean answered;
-    /**
-     * No arg constructor
-     */
-    public Question() {
-        type = "No type";
-        content = "No content";
-    }
+
 
     /**
      * Used in takeQuiz() to determine if a question has already been answered

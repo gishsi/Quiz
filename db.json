@@ -94,73 +94,8 @@
       {
         "id": "Bank2",
         "questionsEng": [
-          {
-            "possibleAnswers": [
-              "No",
-              "Maybe",
-              "Yes"
-            ],
-            "correctAnswer": "Yes",
-            "type": "SingleChoice",
-            "content": "Do you like ice-cream?",
-            "answered": false
-          },
-          {
-            "blankWords": [
-              "drink",
-              "water"
-            ],
-            "type": "FillTheBlanks",
-            "content": "My favourite _____ is _____.",
-            "answered": false
-          }
         ],
         "questionsPL": [
-          {
-            "possibleAnswers": [
-              "Nie",
-              "Moze",
-              "Tak"
-            ],
-            "correctAnswer": "Tak",
-            "type": "SingleChoice",
-            "content": "Lubisz lody?",
-            "answered": false
-          },
-          {
-            "blankWords": [
-              "picie",
-              "woda"
-            ],
-            "type": "FillTheBlanks",
-            "content": "Moje ulubione _____ to ____.",
-            "answered": false
-          }
-        ]
-      },
-      {
-        "id": "Bank3",
-        "questionsEng": [
-          {
-            "possibleAnswers": [
-              "a"
-            ],
-            "correctAnswer": "a",
-            "type": "SingleChoice",
-            "content": "sdaf",
-            "answered": false
-          }
-        ],
-        "questionsPL": [
-          {
-            "possibleAnswers": [
-              "a"
-            ],
-            "correctAnswer": "a",
-            "type": "SingleChoice",
-            "content": "asf",
-            "answered": false
-          }
         ]
       }
     ]

@@ -118,6 +118,7 @@ public class Bank {
      * Removes a question - needs to be removing both english and polish version
      */
     public void removeQuestion() {
+        System.out.println(listQuestions());
         System.out.println("Which question to remove?");
         Scanner scan = new Scanner(System.in);
         try {
@@ -133,7 +134,6 @@ public class Bank {
                 System.err.println("Wrong question number");
             }
         } catch(InputMismatchException | NumberFormatException e) {
-            //e.printStackTrace();
             System.err.println("Invalid input");
         }
     }
