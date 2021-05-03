@@ -1,10 +1,8 @@
-package without_module;
+package jud28;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -440,6 +438,70 @@ public class Application {
         System.out.println("Time: " + (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS) % SECONDS) + ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS) % SECONDS) + ":" + (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS)) % SECONDS);
         System.out.println("Questions answered: " + score);
         System.out.println("Questions not answered: " + (Q - score));
+        String time = (TimeUnit.HOURS.convert(elapsedTime, TimeUnit.NANOSECONDS) % SECONDS) + ":" + (TimeUnit.MINUTES.convert(elapsedTime, TimeUnit.NANOSECONDS) % SECONDS) + ":" + (TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS)) % SECONDS;
+        // save loaded score to the list
+        List<Score> scores = loadScore();
+        // add the new score to the scores list
+        scores.add(new Score(time, score, (Q - score)));
+        saveScore(scores);
+    }
+
+    /**
+     * Load score from the score.json
+     * @return loaded scores
+     */
+    private List<Score> loadScore() {
+        List<Score> scores = new ArrayList<>();
+        // gson instance
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
+        // br instance - reading files
+        BufferedReader br = null;
+        try {
+            // get the file
+            br = new BufferedReader(new FileReader("score.json"));
+            // with a list of objects such as  modules we need to get the type
+            Type foundListType = new TypeToken<ArrayList<Score>>() {
+            }.getType();
+            scores = gson.fromJson(br, foundListType);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return scores;
+    }
+
+    /**
+     * Save the scores list to the score.json file
+     * @param scores
+     */
+    private void saveScore(List<Score> scores) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Type foundListType = new TypeToken<List<Score>>() {
+        }.getType();
+        String jsonString = gson.toJson(scores, foundListType);
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter("score.json");
+            writer.write(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**

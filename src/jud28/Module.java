@@ -1,4 +1,4 @@
-package without_module;
+package jud28;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

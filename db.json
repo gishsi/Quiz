@@ -56,7 +56,7 @@
             ],
             "correctAnswer": "Merkury",
             "type": "SingleChoice",
-            "content": "",
+            "content": "Ktora planeta jest najblizsza Sloncu?",
             "answered": false
           },
           {
@@ -77,7 +77,7 @@
             ],
             "correctAnswer": "au",
             "type": "SingleChoice",
-            "content": "Jaki jest symbol jednostki eprezentujacej w przyblizeniu odleglosc Slonca od Ziemi?",
+            "content": "Jaki jest symbol jednostki reprezentujacej w przyblizeniu odleglosc Slonca od Ziemi?",
             "answered": false
           },
           {
